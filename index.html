@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#101a38" />
+  <title>Eventos</title>
+  <style>
+    :root{
+      --ink:#101a38;--muted:#7f89a7;--line:#e7eaf4;--surface:#fff;--bg:#f4f7ff;
+      --purple:#7a3cff;--purple2:#b457ff;--blue:#0b79ff;--green:#14bd67;--red:#ff4040;
+      --shadow:0 18px 48px rgba(38,50,102,.13);--soft:0 10px 28px rgba(51,67,125,.09)
+    }
+    *{box-sizing:border-box}html{background:#0b132b}body{margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#101a38 0 218px,#f7f9ff 218px 100%);min-height:100vh}
+    button,input,select{font:inherit}.app{width:min(100%,540px);min-height:100vh;margin:auto;position:relative;padding-bottom:94px;background:radial-gradient(circle at 10% 12%,rgba(194,124,255,.22),transparent 26%),linear-gradient(180deg,transparent 0 210px,#f8f8ff 210px 100%)}
+    .top{padding:calc(18px + env(safe-area-inset-top)) 18px 16px;color:white;background:linear-gradient(145deg,rgba(20,18,61,.96),rgba(15,37,72,.96));position:sticky;top:0;z-index:20;box-shadow:0 10px 30px rgba(11,19,43,.16)}
+    .brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#d45cff,#7a3cff);box-shadow:0 10px 22px rgba(146,67,255,.35);font-size:22px}.brand h1{font-size:26px;line-height:1;margin:0 0 4px;letter-spacing:-.04em}.brand p{margin:0;color:#d9def0;font-size:12px}.gear{margin-left:auto;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.09);color:#fff;font-size:20px}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}.tab{border:0;border-radius:15px;padding:12px 8px;color:#dce2ef;background:rgba(255,255,255,.10);font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px}.tab.active.hucha{color:#fff;background:linear-gradient(135deg,#8b3dff,#b45dff);box-shadow:0 9px 23px rgba(150,68,255,.34)}.tab.active.inversion{color:#fff;background:linear-gradient(135deg,#0876ff,#16a0ff);box-shadow:0 9px 23px rgba(23,125,255,.30)}.tab.active.beneficios{color:#fff;background:linear-gradient(135deg,#0eb65e,#22d985);box-shadow:0 9px 23px rgba(21,188,103,.30)}
+    main{padding:14px}.page{display:none}.page.active{display:block}.card{background:rgba(255,255,255,.95);border:1px solid rgba(121,134,180,.12);border-radius:28px;box-shadow:var(--shadow)}
+    .hero{padding:18px;overflow:hidden;position:relative}.hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-90px;top:-90px;background:rgba(255,255,255,.13);pointer-events:none}
+    .row{display:flex;align-items:center}.between{justify-content:space-between}.eyebrow{font-size:12px;font-weight:900;letter-spacing:.04em;color:#58627d}.goal{font-size:18px;font-weight:900}.bar{height:12px;background:#e8eaf5;border-radius:999px;overflow:hidden;margin:10px 0 18px}.bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#7b37ff,#b455ff);border-radius:999px;transition:width .35s}.amount{font-size:42px;font-weight:950;letter-spacing:-.055em}.sub{color:#8d94ab;margin-top:2px}.percent{padding:7px 10px;border-radius:999px;background:#dcf8e8;color:#0a9d53;font-weight:900}.pig-stage{min-height:185px;display:grid;place-items:center;margin:2px 0 8px}.pig{width:210px;filter:drop-shadow(0 16px 20px rgba(133,82,154,.18))}.pig .body{fill:#ff9db4}.pig .snout{fill:#ff799b}.pig .ear{fill:#ff8aa7}.pig .coin{fill:#ffd556;stroke:#efa900;stroke-width:3}.pig .leg{fill:#f06d8d}.pig .eye{fill:#24263a}.pig .slot{stroke:#9b5f6e;stroke-width:4;stroke-linecap:round}.note-strip{padding:12px 14px;border-radius:17px;background:linear-gradient(135deg,#f4ecff,#eee4ff);color:#6e3ae5;font-weight:800;text-align:center;font-size:13px}
+    .actions{display:grid;gap:10px;margin-top:12px}.primary,.secondary{border:0;border-radius:18px;padding:15px 18px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:8px}.primary.purple{background:linear-gradient(135deg,#7d37ff,#a744ff);color:#fff;box-shadow:0 10px 24px rgba(125,55,255,.25)}.primary.blue{background:linear-gradient(135deg,#0876ff,#118cff);color:#fff;box-shadow:0 10px 24px rgba(8,118,255,.24)}.primary.green{background:linear-gradient(135deg,#0ebc62,#17cf74);color:#fff;box-shadow:0 10px 24px rgba(14,188,98,.22)}.secondary{background:#fff;color:#7544e6;border:1px solid #e6ddff}
+    .section{margin-top:16px}.section-head{display:flex;align-items:center;justify-content:space-between;margin:0 4px 9px}.section-head h2{font-size:18px;margin:0;letter-spacing:-.03em}.link{border:0;background:transparent;color:#6c42e9;font-size:12px;font-weight:800}.list{background:#fff;border-radius:22px;overflow:hidden;border:1px solid #e9ecf5;box-shadow:var(--soft)}.item{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid #edf0f6}.item:last-child{border-bottom:0}.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#efe5ff;color:#7240e6;font-size:12px;font-weight:900}.item strong{display:block;font-size:14px}.meta{font-size:11px;color:#8992aa;margin-top:3px}.money.plus{color:#0cac5a;font-weight:950}.money.minus{color:#f33;font-weight:950}.dots{border:0;background:transparent;color:#72809f;font-weight:900;font-size:18px}.empty{padding:22px;text-align:center;color:#9098ad;font-size:13px}
+    .invest-hero{background:linear-gradient(145deg,#f9fcff,#e8f4ff)}.benefit-hero{background:linear-gradient(145deg,#fbfffc,#e5faef)}.big-icon{width:56px;height:56px;border-radius:20px;display:grid;place-items:center;font-size:28px;margin-right:12px}.big-icon.blue{background:#dcecff}.big-icon.green{background:#ddf8e9}.total-label{font-size:14px;font-weight:900}.total-number{font-size:38px;font-weight:950;letter-spacing:-.05em}.chips{display:flex;gap:8px;overflow:auto;padding:2px 0 4px;margin-top:12px}.chip{border:1px solid #dce4f2;background:#f5f8fd;border-radius:999px;padding:9px 14px;color:#75809a;white-space:nowrap;font-size:12px;font-weight:800}.chip.active{background:#0b7bff;color:#fff;border-color:#0b7bff}.expense-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e9f8ef;font-size:19px}.event-tag{display:inline-block;padding:2px 6px;border-radius:7px;background:#e9f2ff;color:#0571f7;font-size:10px;font-weight:900}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.stat{padding:12px 9px;border-radius:18px;background:#fff;border:1px solid #e9eff1;text-align:center}.stat small{display:block;color:#7d8996;font-size:9px}.stat b{display:block;margin-top:5px;font-size:16px}.stat.green b{color:#0aa758}.event-card{display:grid;grid-template-columns:46px minmax(0,1fr) auto;align-items:center;gap:11px;padding:13px;border-bottom:1px solid #e8f0eb}.event-card:last-child{border-bottom:0}.event-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eee7ff;font-size:20px}.gain{padding:7px 9px;border-radius:12px;background:#e6f8ee;color:#0aa658;text-align:right}.gain small{display:block;font-size:9px}.gain b{font-size:15px}.footer-quote{margin-top:14px;padding:14px;border-radius:18px;text-align:center;font-size:12px;font-weight:800}.footer-quote.purple{background:#f0e8ff;color:#6c3be3}.footer-quote.blue{background:#e8f3ff;color:#146fc9}.footer-quote.green{background:#e3f8ec;color:#087f48}
+    .bottom{position:fixed;z-index:30;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,540px);height:78px;padding:8px 18px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);background:rgba(255,255,255,.96);border-top:1px solid #e8ebf3;backdrop-filter:blur(18px)}.bottom button{border:0;background:transparent;color:#73809a;font-weight:800;font-size:11px;display:grid;place-items:center;gap:2px}.bottom span{font-size:22px}.bottom button.active.hucha{color:#7c3cff}.bottom button.active.inversion{color:#0877ff}.bottom button.active.beneficios{color:#11b760}
+    dialog{border:0;padding:0;border-radius:28px;width:min(calc(100% - 28px),460px);box-shadow:0 30px 90px rgba(8,17,44,.34)}dialog::backdrop{background:rgba(9,18,44,.55);backdrop-filter:blur(3px)}.modal{padding:22px}.modal h3{font-size:22px;margin:0 0 5px}.modal p{margin:0 0 16px;color:#8891a7;font-size:12px}.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:11px;font-weight:900;color:#5f6880}.field input,.field select{width:100%;border:1px solid #dfe4ee;border-radius:14px;padding:13px 14px;outline:none;background:#fbfcff}.field input:focus,.field select:focus{border-color:#8d57ff;box-shadow:0 0 0 3px rgba(141,87,255,.12)}.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}.cancel{border:0;border-radius:14px;padding:13px;background:#f0f2f7;color:#65708b;font-weight:900}.save{border:0;border-radius:14px;padding:13px;background:#121c3c;color:#fff;font-weight:900}.danger{color:#e63b3b}
+    @media(max-width:380px){.top{padding-inline:13px}.brand h1{font-size:23px}.tab{font-size:11px;padding:11px 5px}.amount{font-size:38px}.pig{width:190px}.stats{gap:5px}.stat b{font-size:14px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">✦</div><div><h1>Eventos</h1><p>Grandes eventos, mejores momentos</p></div><button class="gear" aria-label="Ajustes">⚙︎</button></div>
+    <nav class="tabs">
+      <button class="tab hucha active" data-page="hucha">🐷 <span>Hucha</span></button>
+      <button class="tab inversion" data-page="inversion">▥ <span>Inversión</span></button>
+      <button class="tab beneficios" data-page="beneficios">↗ <span>Beneficios</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page active" id="hucha">
+      <div class="card hero">
+        <div class="row between"><span class="eyebrow">Objetivo de la hucha</span><span class="goal">7.000 €</span></div>
+        <div class="bar"><span id="savingBar"></span></div>
+        <div class="row between"><div><div class="amount" id="savingTotal">0 €</div><div class="sub">de 7.000 €</div></div><span class="percent" id="savingPercent">0%</span></div>
+        <div class="pig-stage" aria-label="Hucha">
+          <svg class="pig" viewBox="0 0 250 170" role="img" aria-label="Cerdito hucha">
+            <ellipse cx="125" cy="110" rx="83" ry="52" class="body"/>
+            <circle cx="62" cy="91" r="36" class="body"/>
+            <path d="M43 65 L52 40 L71 65Z" class="ear"/><path d="M83 67 L94 45 L104 72Z" class="ear"/>
+            <ellipse cx="44" cy="100" rx="24" ry="18" class="snout"/><circle cx="37" cy="100" r="3" fill="#c94e70"/><circle cx="51" cy="100" r="3" fill="#c94e70"/>
+            <circle cx="67" cy="83" r="4" class="eye"/><path d="M102 61h42" class="slot"/>
+            <rect x="82" y="146" width="17" height="17" rx="5" class="leg"/><rect x="163" y="145" width="17" height="18" rx="5" class="leg"/>
+            <path d="M205 104q24-14 16 8q-5 13-17 2" fill="none" stroke="#ef7694" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="124" cy="40" r="23" class="coin"/><text x="124" y="49" text-anchor="middle" font-size="27" font-weight="900" fill="#d89500">€</text>
+          </svg>
+        </div>
+        <div class="actions"><button class="primary purple" id="addSaving">＋ Añadir dinero</button><button class="secondary" id="withdrawSaving">− Retirar dinero</button></div>
+      </div>
+      <div class="section"><div class="section-head"><h2>Últimas aportaciones</h2><button class="link" id="clearSavings">Vaciar historial</button></div><div class="list" id="savingList"></div></div>
+      <div class="footer-quote purple">Cada aportación nos acerca a un gran evento</div>
+    </section>
+
+    <section class="page" id="inversion">
+      <div class="card hero invest-hero">
+        <div class="row"><div class="big-icon blue">🛒</div><div><div class="total-label">Total invertido</div><div class="sub">Controla todos los gastos de los eventos</div></div></div>
+        <div class="total-number" id="investTotal">0 €</div>
+        <div class="actions"><button class="primary blue" id="addExpense">＋ Añadir gasto</button></div>
+      </div>
+      <div class="chips" id="expenseFilters"></div>
+      <div class="section"><div class="section-head"><h2>Gastos recientes</h2><button class="link" id="clearExpenses">Vaciar historial</button></div><div class="list" id="expenseList"></div></div>
+      <div class="footer-quote blue">Cada detalle cuenta para hacer eventos inolvidables</div>
+    </section>
+
+    <section class="page" id="beneficios">
+      <div class="card hero benefit-hero">
+        <div class="row"><div class="big-icon green">🏆</div><div><div class="total-label">Total ganado</div><div class="sub">Suma de todos los eventos</div></div></div>
+        <div class="total-number" id="profitTotal">0 €</div>
+        <div class="stats"><div class="stat"><small>Eventos</small><b id="eventCount">0</b></div><div class="stat green"><small>Ingreso medio</small><b id="eventAverage">0 €</b></div><div class="stat green"><small>Mayor ganancia</small><b id="eventMax">0 €</b></div></div>
+        <div class="actions"><button class="primary green" id="addEvent">＋ Añadir evento</button></div>
+      </div>
+      <div class="section"><div class="section-head"><h2>Eventos y ganancias</h2><button class="link" id="clearEvents">Vaciar historial</button></div><div class="list" id="eventList"></div></div>
+      <div class="footer-quote green">Cada evento deja huella y grandes beneficios</div>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="hucha active" data-page="hucha"><span>🐷</span>Hucha</button>
+    <button class="inversion" data-page="inversion"><span>▥</span>Inversión</button>
+    <button class="beneficios" data-page="beneficios"><span>↗</span>Beneficios</button>
+  </nav>
+</div>
+
+<dialog id="modal"><form method="dialog" class="modal" id="modalForm"><h3 id="modalTitle"></h3><p id="modalSubtitle"></p><div id="modalFields"></div><div class="modal-actions"><button class="cancel" value="cancel">Cancelar</button><button class="save" id="modalSave" value="default">Guardar</button></div></form></dialog>
+
+<script>
+  const euro=n=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(Number(n)||0);
+  const today=()=>new Intl.DateTimeFormat('es-ES',{day:'2-digit',month:'short',year:'numeric'}).format(new Date());
+  const storeKey='eventos-app-v1';
+  const state=Object.assign({savings:[],expenses:[],events:[]},JSON.parse(localStorage.getItem(storeKey)||'{}'));
+  const save=()=>localStorage.setItem(storeKey,JSON.stringify(state));
+
+  const pages=[...document.querySelectorAll('[data-page]')];
+  function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===name));pages.forEach(b=>b.classList.toggle('active',b.dataset.page===name));window.scrollTo({top:0,behavior:'smooth'})}
+  pages.forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+  const modal=document.getElementById('modal'),modalForm=document.getElementById('modalForm'),modalFields=document.getElementById('modalFields');
+  let modalAction=null;
+  function openModal({title,subtitle='',fields,onSave}){
+    modalAction=onSave;document.getElementById('modalTitle').textContent=title;document.getElementById('modalSubtitle').textContent=subtitle;
+    modalFields.innerHTML=fields.map(f=>`<div class="field"><label>${f.label}</label>${f.type==='select'?`<select name="${f.name}" required>${f.options.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`:`<input name="${f.name}" type="${f.type||'text'}" ${f.step?`step="${f.step}"`:''} ${f.min!==undefined?`min="${f.min}"`:''} placeholder="${f.placeholder||''}" ${f.required===false?'':'required'}>`}</div>`).join('');modal.showModal();
+  }
+  modalForm.addEventListener('submit',e=>{if(e.submitter?.value==='cancel')return; e.preventDefault();const data=Object.fromEntries(new FormData(modalForm).entries());modalAction?.(data);modal.close();save();render()});
+
+  document.getElementById('addSaving').onclick=()=>openModal({title:'Añadir dinero',subtitle:'Registra una nueva aportación a la hucha.',fields:[{label:'Nombre',name:'name',placeholder:'Ej. Fernando'},{label:'Cantidad',name:'amount',type:'number',step:'0.01',min:0.01,placeholder:'100'}],onSave:d=>state.savings.unshift({id:Date.now(),name:d.name,amount:+d.amount,date:today(),type:'in'})});
+  document.getElementById('withdrawSaving').onclick=()=>openModal({title:'Retirar dinero',subtitle:'La cantidad se restará del total de la hucha.',fields:[{label:'Motivo',name:'name',placeholder:'Ej. Reserva del local'},{label:'Cantidad',name:'amount',type:'number',step:'0.01',min:0.01,placeholder:'50'}],onSave:d=>state.savings.unshift({id:Date.now(),name:d.name,amount:+d.amount,date:today(),type:'out'})});
+  document.getElementById('addExpense').onclick=()=>openModal({title:'Añadir gasto',subtitle:'Añade cualquier compra o gasto del evento.',fields:[{label:'Concepto',name:'name',placeholder:'Ej. 5 palmeras decorativas'},{label:'Evento',name:'event',placeholder:'Ej. Evento 1'},{label:'Cantidad',name:'amount',type:'number',step:'0.01',min:0.01,placeholder:'500'}],onSave:d=>state.expenses.unshift({id:Date.now(),name:d.name,event:d.event,amount:+d.amount,date:today()})});
+  document.getElementById('addEvent').onclick=()=>openModal({title:'Añadir evento',subtitle:'Introduce el dinero ganado en este evento.',fields:[{label:'Nombre del evento',name:'name',placeholder:'Ej. Primer evento'},{label:'Dinero ganado',name:'amount',type:'number',step:'0.01',min:0,placeholder:'1200'}],onSave:d=>state.events.unshift({id:Date.now(),name:d.name,amount:+d.amount,date:today()})});
+
+  function deleteBy(collection,id){state[collection]=state[collection].filter(x=>x.id!==id);save();render()}
+  document.getElementById('clearSavings').onclick=()=>{if(confirm('¿Vaciar todo el historial de la hucha?')){state.savings=[];save();render()}};
+  document.getElementById('clearExpenses').onclick=()=>{if(confirm('¿Vaciar todos los gastos?')){state.expenses=[];save();render()}};
+  document.getElementById('clearEvents').onclick=()=>{if(confirm('¿Vaciar todos los eventos?')){state.events=[];save();render()}};
+
+  let expenseFilter='Todos';
+  function render(){
+    const saving=state.savings.reduce((s,x)=>s+(x.type==='out'?-x.amount:x.amount),0), pct=Math.max(0,Math.min(100,saving/7000*100));
+    document.getElementById('savingTotal').textContent=euro(saving);document.getElementById('savingPercent').textContent=Math.round(pct)+'%';document.getElementById('savingBar').style.width=pct+'%';
+    document.getElementById('savingList').innerHTML=state.savings.length?state.savings.map(x=>`<div class="item"><div class="avatar">${(x.name||'?').slice(0,2).toUpperCase()}</div><div><strong>${x.name}</strong><div class="meta">${x.date}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="money ${x.type==='out'?'minus':'plus'}">${x.type==='out'?'-':'+'}${euro(x.amount)}</span><button class="dots" onclick="deleteBy('savings',${x.id})">×</button></div></div>`).join(''):'<div class="empty">Todavía no hay aportaciones. Añade la primera cuando quieras.</div>';
+
+    const invest=state.expenses.reduce((s,x)=>s+x.amount,0);document.getElementById('investTotal').textContent=euro(invest);
+    const events=['Todos',...new Set(state.expenses.map(x=>x.event).filter(Boolean))];document.getElementById('expenseFilters').innerHTML=events.map(e=>`<button class="chip ${expenseFilter===e?'active':''}" onclick="expenseFilter='${e.replaceAll("'","\\'")}';render()">${e}</button>`).join('');
+    const filtered=expenseFilter==='Todos'?state.expenses:state.expenses.filter(x=>x.event===expenseFilter);document.getElementById('expenseList').innerHTML=filtered.length?filtered.map(x=>`<div class="item"><div class="expense-icon">🧾</div><div><strong>${x.name}</strong><div class="meta"><span class="event-tag">${x.event||'Sin evento'}</span> · ${x.date}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="money minus">-${euro(x.amount)}</span><button class="dots" onclick="deleteBy('expenses',${x.id})">×</button></div></div>`).join(''):'<div class="empty">No hay gastos en esta vista.</div>';
+
+    const total=state.events.reduce((s,x)=>s+x.amount,0),count=state.events.length,avg=count?total/count:0,max=count?Math.max(...state.events.map(x=>x.amount)):0;
+    document.getElementById('profitTotal').textContent=euro(total);document.getElementById('eventCount').textContent=count;document.getElementById('eventAverage').textContent=euro(avg);document.getElementById('eventMax').textContent=euro(max);
+    document.getElementById('eventList').innerHTML=count?state.events.map((x,i)=>`<div class="event-card"><div class="event-icon">${['🎵','🍸','🎉','📅','✨'][i%5]}</div><div><strong>${x.name}</strong><div class="meta">${x.date}</div></div><div style="display:flex;align-items:center;gap:6px"><div class="gain"><small>Ganado</small><b>+${euro(x.amount)}</b></div><button class="dots" onclick="deleteBy('events',${x.id})">×</button></div></div>`).join(''):'<div class="empty">Todavía no hay eventos. Añade el primero para empezar a sumar ganancias.</div>';
+  }
+  render();
+</script>
+</body>
+</html>
