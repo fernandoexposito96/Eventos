@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07142f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
+<meta name="eventos-build" content="premium-v7-20260908">
+<title>Eventos</title>
+<link rel="stylesheet" href="./style.css?v=7">
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand">
+    <div class="brandmark">✦</div>
+    <div><h1>Eventos</h1><p>Grandes eventos, mejores momentos</p></div>
+    <button class="gear" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1a8 8 0 0 0-1.8-1L14.4 3h-4.8l-.3 3.1a8 8 0 0 0-1.8 1l-2.4-1-2 3.4L5.1 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.8 1l.3 3.1h4.8l.3-3.1a8 8 0 0 0 1.8-1l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1Z"/></svg></button>
+  </div>
+  <nav class="tabs">
+    <button class="tab hucha active" data-page="hucha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 10c0-3 2.8-5.5 6.5-5.5S18 7 18 10v1.5c1.5 0 2.5 1 2.5 2.2 0 1-.7 1.8-1.8 2.1L18 20h-3l-.5-2h-6L8 20H5l-.7-4.2A5.4 5.4 0 0 1 2 11.5V10h3Z"/><path d="M8.5 8.5h.01M14 7h3"/></svg><span>Hucha</span></button>
+    <button class="tab inversion" data-page="inversion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M9 20V4M14 20v-7M19 20V7"/></svg><span>Inversión</span></button>
+    <button class="tab beneficios" data-page="beneficios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 17 17 5M10 5h7v7"/></svg><span>Beneficios</span></button>
+  </nav>
+</header>
+<main>
+<section class="page active" id="hucha">
+  <div class="card hero hucha">
+    <div class="titlebar"><div class="titleleft"><div class="badge purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M5 12H2M12 19v3"/></svg></div><div class="titlecopy"><b>Objetivo de la hucha</b></div></div><div class="goal">7.000 €</div></div>
+    <div class="progress"><span id="saveBar"></span></div>
+    <div class="amountrow"><div><div class="amount" id="saveTotal">0,00 €</div><div class="sub">de 7.000 €</div></div><div class="ring" id="saveRing"><b id="savePct">0%</b></div></div>
+    <div class="pigstage">
+      <svg class="pig" viewBox="0 0 270 185" aria-label="Cerdito hucha"><defs><radialGradient id="bodyG" cx="38%" cy="28%" r="78%"><stop offset="0" stop-color="#fff2ff"/><stop offset=".18" stop-color="#ffb2ed"/><stop offset=".58" stop-color="#f16bd9"/><stop offset="1" stop-color="#b74df1"/></radialGradient><radialGradient id="headG" cx="34%" cy="25%" r="80%"><stop offset="0" stop-color="#ffd1f2"/><stop offset=".46" stop-color="#f477db"/><stop offset="1" stop-color="#c64ce8"/></radialGradient><linearGradient id="coinG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffe97a"/><stop offset="1" stop-color="#ffad19"/></linearGradient><filter id="soft"><feGaussianBlur stdDeviation="10"/></filter></defs><ellipse cx="138" cy="126" rx="95" ry="20" fill="#c88be9" opacity=".19" filter="url(#soft)"/><ellipse cx="150" cy="105" rx="77" ry="49" fill="url(#bodyG)"/><circle cx="83" cy="91" r="38" fill="url(#headG)"/><path d="M58 65 66 34 87 66Z" fill="#f05fd2"/><path d="m90 63 14-27 17 33Z" fill="#d64dd0"/><ellipse cx="55" cy="101" rx="25" ry="18" fill="#ee60be"/><ellipse cx="55" cy="101" rx="18" ry="12" fill="#f58ed2"/><circle cx="47" cy="101" r="3.2" fill="#a63180"/><circle cx="63" cy="101" r="3.2" fill="#a63180"/><circle cx="86" cy="82" r="4.8" fill="#0b1636"/><circle cx="84.5" cy="80.5" r="1.3" fill="#fff"/><path d="M122 60h44" stroke="#8e3379" stroke-width="5" stroke-linecap="round"/><rect x="106" y="145" width="18" height="19" rx="6" fill="#d64bc1"/><rect x="169" y="145" width="18" height="19" rx="6" fill="#b847d6"/><path d="M219 101q25-12 16 11-5 12-18 2" fill="none" stroke="#be48d8" stroke-width="7" stroke-linecap="round"/><ellipse cx="137" cy="80" rx="37" ry="18" fill="#fff" opacity=".14" transform="rotate(-10 137 80)"/><circle cx="146" cy="38" r="25" fill="url(#coinG)" stroke="#e99b00" stroke-width="3"/><circle cx="146" cy="38" r="19" fill="none" stroke="#fff5ad" stroke-width="2" opacity=".8"/><text x="146" y="48" text-anchor="middle" font-size="29" font-weight="900" fill="#d88b00">€</text></svg>
+    </div>
+    <div class="motivation">Cada aportación nos acerca a un gran evento</div>
+    <button class="primary purple" id="addMoney"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Añadir dinero</button>
+  </div>
+  <div class="section"><div class="sectionhead"><h2>Últimas aportaciones</h2><button class="link" id="clearSavings">Vaciar historial</button></div><div class="list" id="savingList"></div></div>
+  <div class="footer-note purple">Cada aportación nos acerca a un gran evento</div>
+</section>
+<section class="page" id="inversion">
+  <div class="card hero inv"><div class="titlebar"><div class="titleleft"><div class="badge blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h2l2 10h10l2-7H6"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></div><div class="titlecopy"><b>Total invertido</b><span>Controla todos los gastos de los eventos</span></div></div></div><div class="totalrow"><div class="total" id="investTotal">0,00 €</div><svg class="chart" viewBox="0 0 120 55"><defs><linearGradient id="blueFill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#69b9ff" stop-opacity=".75"/><stop offset="1" stop-color="#69b9ff" stop-opacity="0"/></linearGradient></defs><path d="M0 48 C18 45 18 33 31 35 S48 14 60 24 75 30 85 17 103 5 120 12V55H0Z" fill="url(#blueFill)"/></svg></div><button class="primary blue" id="addExpense"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Añadir gasto</button></div>
+  <div class="chips"><button class="chip active" data-filter="Todos">Todos</button><button class="chip" data-filter="Material">Material</button><button class="chip" data-filter="Catering">Catering</button><button class="chip" data-filter="Local">Local</button><button class="chip" data-filter="Otros">Otros</button></div>
+  <div class="section"><div class="sectionhead"><h2>Gastos recientes</h2><button class="link" id="clearExpenses">Vaciar historial</button></div><div class="list" id="expenseList"></div></div>
+  <div class="footer-note blue">Cada detalle cuenta para hacer eventos inolvidables</div>
+</section>
+<section class="page" id="beneficios">
+  <div class="card hero ben"><div class="titlebar"><div class="titleleft"><div class="badge green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 12v4M8 20h8M10 16h4"/></svg></div><div class="titlecopy"><b>Total ganado</b><span>Suma de todos los eventos</span></div></div><svg class="chart" viewBox="0 0 120 55"><rect x="10" y="37" width="10" height="16" rx="5" fill="#75deb0"/><rect x="31" y="29" width="10" height="24" rx="5" fill="#62d8a1"/><rect x="52" y="21" width="10" height="32" rx="5" fill="#4bd090"/><rect x="73" y="12" width="10" height="41" rx="5" fill="#35c781"/><rect x="94" y="4" width="10" height="49" rx="5" fill="#20bd70"/></svg></div><div class="total" id="benefitTotal" style="margin-top:9px">0,00 €</div><div class="stats"><div class="stat"><small>Eventos</small><b id="eventCount">0</b></div><div class="stat"><small>Ingreso medio</small><b class="g" id="eventAvg">0,00 €</b></div><div class="stat"><small>Mayor ganancia</small><b class="g" id="eventMax">0,00 €</b></div></div><button class="primary green" id="addEvent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Añadir evento</button></div>
+  <div class="section"><div class="sectionhead"><h2>Eventos y ganancias</h2><button class="link green" id="clearEvents">Vaciar historial</button></div><div class="list" id="eventList"></div></div>
+  <div class="footer-note green">Cada evento deja huella y grandes beneficios</div>
+</section>
+</main>
+<nav class="bottom"><button class="hucha active" data-page="hucha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 10c0-3 2.8-5.5 6.5-5.5S18 7 18 10v1.5c1.5 0 2.5 1 2.5 2.2 0 1-.7 1.8-1.8 2.1L18 20h-3l-.5-2h-6L8 20H5l-.7-4.2A5.4 5.4 0 0 1 2 11.5V10h3Z"/></svg><span>Hucha</span></button><button class="inversion" data-page="inversion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M9 20V4M14 20v-7M19 20V7"/></svg><span>Inversión</span></button><button class="beneficios" data-page="beneficios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17 17 5M10 5h7v7"/></svg><span>Beneficios</span></button></nav>
+</div>
+<div class="modalback" id="modalBack"><div class="modal"><h3 id="modalTitle"></h3><p id="modalSub"></p><div id="modalFields"></div><div class="modalactions"><button class="cancel" id="cancelModal">Cancelar</button><button class="save" id="saveModal">Guardar</button></div></div></div>
+<script src="./app.js?v=7"></script>
+</body></html>
