@@ -36,11 +36,11 @@
     if(!section) return;
 
     const heading = section.querySelector('.person-contribution-head h2');
-    if(heading) heading.textContent = 'Contribuyentes';
+    if(heading && heading.textContent !== 'Contribuyentes') heading.textContent = 'Contribuyentes';
 
     const names = section.querySelectorAll('.person-contribution-copy strong');
-    if(names[0]) names[0].textContent = 'Fernando';
-    if(names[1]) names[1].textContent = 'José';
+    if(names[0] && names[0].textContent !== 'Fernando') names[0].textContent = 'Fernando';
+    if(names[1] && names[1].textContent !== 'José') names[1].textContent = 'José';
 
     const head = section.querySelector('.person-contribution-head');
     if(head && !head.querySelector('.extract-link')){
@@ -57,7 +57,6 @@
 
   function decorateHistory(){
     document.querySelectorAll('[data-clear]').forEach(button => button.remove());
-
     decorateContributors();
 
     ['savings','expenses'].forEach(type => {
@@ -110,8 +109,21 @@
     });
   }
 
-  const observer = new MutationObserver(decorateHistory);
-  observer.observe(document.getElementById('app'),{childList:true,subtree:true});
-  decorateHistory();
+  let scheduled = false;
+  function scheduleDecorate(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      decorateHistory();
+    });
+  }
+
+  const appRoot = document.getElementById('app');
+  if(appRoot){
+    const observer = new MutationObserver(scheduleDecorate);
+    observer.observe(appRoot,{childList:true,subtree:true});
+    decorateHistory();
+  }
 })();
-// deployed: contributor cards + individual history deletion
+// stable contributor cards + individual history deletion
