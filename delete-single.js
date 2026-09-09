@@ -31,8 +31,34 @@
     toast('Evento eliminado');
   }
 
+  function decorateContributors(){
+    const section = document.querySelector('.theme-purple .person-contribution-section');
+    if(!section) return;
+
+    const heading = section.querySelector('.person-contribution-head h2');
+    if(heading) heading.textContent = 'Contribuyentes';
+
+    const names = section.querySelectorAll('.person-contribution-copy strong');
+    if(names[0]) names[0].textContent = 'Fernando';
+    if(names[1]) names[1].textContent = 'José';
+
+    const head = section.querySelector('.person-contribution-head');
+    if(head && !head.querySelector('.extract-link')){
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'extract-link';
+      button.textContent = 'Ver extracto';
+      button.addEventListener('click', () => {
+        document.querySelector('.theme-purple .list-section')?.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+      head.appendChild(button);
+    }
+  }
+
   function decorateHistory(){
     document.querySelectorAll('[data-clear]').forEach(button => button.remove());
+
+    decorateContributors();
 
     ['savings','expenses'].forEach(type => {
       const items = currentItems(type);
@@ -88,4 +114,4 @@
   observer.observe(document.getElementById('app'),{childList:true,subtree:true});
   decorateHistory();
 })();
-// deployed: individual history deletion
+// deployed: contributor cards + individual history deletion
