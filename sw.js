@@ -1,11 +1,11 @@
-const CACHE_NAME = 'eventos-shell-v14';
+const CACHE_NAME = 'eventos-shell-v15';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css?v=20260909-business-modern-v1',
   './visual-final.css?v=20260909-header-plus-v1',
   './access.css?v=20260909-access-v1',
-  './access.js?v=20260909-access-v1',
+  './access.js?v=20260909-access-v2',
   './app.js?v=20260909-color-v2',
   './cloud-clean.js?v=20260909-clean-v1',
   './manifest.json'
