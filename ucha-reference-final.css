@@ -4,7 +4,7 @@
   overflow:hidden!important;
   min-height:100dvh!important;
   padding-bottom:calc(92px + env(safe-area-inset-bottom))!important;
-  background:#101426 url('./assets/hucha-bg-final.jpg') center top/100% 100% no-repeat!important;
+  background:#6f7dbf url('/Eventos/assets/hucha-bg-final.jpg?v=20260910-hucha-bg-v3') center top/cover no-repeat!important;
 }
 
 /* No se permite que capas antiguas vuelvan a pintar fondos sobre Hucha. */
