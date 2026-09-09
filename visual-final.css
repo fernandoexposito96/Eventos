@@ -13,13 +13,13 @@ body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 .brand-copy p{font-size:10px;margin-top:6px;color:rgba(255,255,255,.94);text-shadow:0 2px 10px rgba(0,0,0,.50)}
 .settings-button{width:40px;height:40px;border-radius:14px;background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px rgba(8,27,49,.20)}
 
-/* Barra justo entre la foto y la zona inferior */
-.tabs{position:absolute;left:18px;right:18px;bottom:-34px;width:auto;margin:0;height:68px;border-radius:23px;background:rgba(255,255,255,.93);border:1px solid rgba(255,255,255,.97);box-shadow:0 16px 34px rgba(38,72,108,.18),inset 0 1px 0 rgba(255,255,255,.96);z-index:6;overflow:hidden}
-.tab{height:68px;font-size:10px;gap:6px;font-weight:760}
-.tab .svg-icon{width:17px;height:17px}
-.tab:after{left:22px;right:22px;height:3px}
+/* Barra compacta a caballo entre la foto y el contenido */
+.tabs{position:absolute;left:30px;right:30px;bottom:-28px;width:auto;margin:0;height:56px;border-radius:20px;background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.98);box-shadow:0 14px 30px rgba(38,72,108,.17),inset 0 1px 0 rgba(255,255,255,.97);z-index:6;overflow:hidden}
+.tab{height:56px;font-size:9px;gap:5px;font-weight:760;padding:0 4px}
+.tab .svg-icon{width:15px;height:15px}
+.tab:after{left:18px;right:18px;height:3px}
 
-.content{padding:54px 15px 34px}
+.content{padding:45px 15px 34px}
 .hero-panel{border-radius:24px;padding:17px;background:rgba(255,255,255,.73);border-color:rgba(255,255,255,.9);box-shadow:0 20px 48px rgba(43,82,119,.13),inset 0 1px 0 rgba(255,255,255,.84)}
 .blue-panel{background:linear-gradient(145deg,rgba(250,253,255,.92),rgba(225,240,255,.78) 50%,rgba(204,225,251,.73))}
 .green-panel{background:linear-gradient(145deg,rgba(250,255,253,.93),rgba(228,248,241,.80) 52%,rgba(201,239,224,.73))}
@@ -39,4 +39,4 @@ body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 
 .bottom-nav{bottom:8px;background:rgba(255,255,255,.86);border-color:rgba(255,255,255,.96);box-shadow:0 16px 36px rgba(33,67,103,.18)}
 
-@media(max-width:370px){.premium-header{min-height:178px}.tabs{left:14px;right:14px;bottom:-31px;height:62px}.tab{height:62px;font-size:9.5px}.content{padding-top:49px}.brand-copy h1{font-size:26px}.brand-copy p{font-size:9.5px}.motivation{min-height:96px}}
+@media(max-width:370px){.premium-header{min-height:178px}.tabs{left:24px;right:24px;bottom:-26px;height:52px}.tab{height:52px;font-size:8.5px}.tab .svg-icon{width:14px;height:14px}.content{padding-top:41px}.brand-copy h1{font-size:26px}.brand-copy p{font-size:9.5px}.motivation{min-height:96px}}
