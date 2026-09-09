@@ -1,0 +1,60 @@
+name: Cleanup Hucha legacy source
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Remove obsolete Hucha styling
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('styles.css')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* visual-final.css */'
+          m = s.find(marker)
+          if m < 0:
+              raise SystemExit('visual-final marker not found')
+          start = s.find('\n.theme-purple .hero-panel.purple-panel{', m)
+          end = s.find('\n/* Zona inferior sin imagen de fondo */', start)
+          if start < 0 or end < 0:
+              raise SystemExit('legacy Hucha block not found')
+          s = s[:start] + '\n\n/* Legacy Hucha visual block removed intentionally. */\n' + s[end:]
+          legacy_mobile = [
+              '  .theme-purple .hero-panel.purple-panel{min-height:420px;background-position:center,center 62px,center}\n',
+              '  .theme-purple .purple-panel .hero-money{font-size:35px;margin-top:102px}\n',
+              '  .theme-purple .purple-panel .metric{padding:29px 7px 10px}\n',
+              '  .theme-purple .purple-panel .metric strong{font-size:12.5px}\n',
+          ]
+          for line in legacy_mobile:
+              s = s.replace(line, '')
+          p.write_text(s, encoding='utf-8')
+          PY
+      - name: Verify cleanup
+        shell: bash
+        run: |
+          ! grep -q 'min-height:438px' styles.css
+          ! grep -q 'center 66px' styles.css
+          ! grep -qi 'youbarcelona' ./*.css ./*.html 2>/dev/null
+          ! grep -qi 'wet deck' ./*.css ./*.html 2>/dev/null
+          ! grep -q 'url(' ucha-reference-final.css
+      - name: Commit cleanup
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add styles.css
+          git diff --cached --quiet && exit 0
+          git commit -m 'Remove obsolete Hucha legacy styling'
+          git push
