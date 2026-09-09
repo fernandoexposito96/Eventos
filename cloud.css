@@ -6,18 +6,18 @@
 .cloud-gate-logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#6f5bff,#40586f);color:#fff;font-weight:800;letter-spacing:-.5px;margin-bottom:16px}
 .cloud-gate-card h2{margin:0;font-size:24px;letter-spacing:-.6px}
 .cloud-gate-card>p{margin:8px 0 18px;color:#6d737c;font-size:13px;line-height:1.5}
-.cloud-auth-form,.cloud-workspace-actions{display:grid;gap:10px}
-.cloud-auth-form input,.cloud-workspace-actions input{width:100%;height:50px;border:1px solid #d9dde3;border-radius:12px;padding:0 13px;background:#fff;color:#171a1f;font-size:14px}
-.cloud-main-btn,.cloud-secondary-btn,.cloud-link-btn,.cloud-logout-btn,.invite-code-row button{border:0;border-radius:12px;font-weight:700}
+.cloud-workspace-actions{display:grid;gap:10px}
+.cloud-workspace-actions input{width:100%;height:50px;border:1px solid #d9dde3;border-radius:12px;padding:0 13px;background:#fff;color:#171a1f;font-size:14px;text-transform:uppercase;letter-spacing:.05em}
+.cloud-main-btn,.cloud-secondary-btn,.cloud-link-btn,.invite-code-row button{border:0;border-radius:12px;font-weight:700}
 .cloud-main-btn{height:50px;background:linear-gradient(135deg,#7357ff,#4a64d8);color:#fff}
 .cloud-secondary-btn{height:46px;background:#eef2f8;color:#2f435b;border:1px solid #dce4ee}
 .cloud-link-btn{height:42px;background:transparent;color:#59616b}
-.cloud-logout-btn{height:44px;background:#fff3f3;color:#9d4040;border:1px solid #efd3d3}
 .cloud-gate-message{min-height:18px;margin-top:10px;color:#6d737c;font-size:12px;line-height:1.4}
 .cloud-separator{text-align:center;color:#a2a7ad;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
 .cloud-settings-card{margin-top:4px;padding:14px;border-radius:14px;background:#f5f7fa;border:1px solid #e3e7ec;display:grid;gap:10px}
 .cloud-settings-title{font-size:13px;font-weight:800}
 .cloud-settings-card p{margin:0;color:#6d737c;font-size:11px;line-height:1.45}
+.cloud-device-note{padding-top:2px;color:#8b9199!important;font-size:10px!important}
 .invite-code-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
 .invite-code-row code{display:flex;align-items:center;min-height:42px;padding:0 12px;border-radius:10px;background:#fff;border:1px solid #dde2e8;font-size:13px;font-weight:800;letter-spacing:.08em;overflow:hidden}
 .invite-code-row button{height:42px;padding:0 13px;background:#20252b;color:#fff}
