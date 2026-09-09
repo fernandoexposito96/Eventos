@@ -29,12 +29,14 @@ jobs:
           node --check app.js
           node --check cloud.js
           node --check access.js
+          node --check delete-single.js
           node --check pwa.js
           node --check sw.js
       - name: Validate final clean build
         run: |
           grep -q "cloud.js" index.html
           grep -q "access.js" index.html
+          grep -q "delete-single.js" index.html
           grep -q "styles.css" index.html
           test -f manifest-v11.json
           test -f apple-touch-icon-v13.png
