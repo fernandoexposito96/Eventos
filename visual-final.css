@@ -1,17 +1,18 @@
-/* Acabado final aprobado: misma estructura, fondos arriba/abajo y cristal moderno */
+/* Tema visual final: misma estructura de Eventos, fotos reales aprobadas arriba y abajo */
 html,body{background:#d8e6f2}
 body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 #app{background:linear-gradient(180deg,rgba(231,242,251,.94),rgba(246,250,253,.98));box-shadow:0 0 80px rgba(23,55,89,.22)}
 .screen{position:relative;background:linear-gradient(180deg,rgba(237,246,253,.88) 0 205px,rgba(240,247,252,.96) 205px 100%)}
 .screen:before{content:"";position:absolute;inset:205px 0 0;pointer-events:none;background:radial-gradient(circle at 8% 16%,rgba(255,255,255,.72),transparent 23%),radial-gradient(circle at 88% 35%,rgba(183,216,246,.30),transparent 26%);z-index:0}
 
-.premium-header{min-height:220px;padding:calc(24px + env(safe-area-inset-top)) 14px 24px;background-image:linear-gradient(180deg,rgba(6,27,49,.04),rgba(6,29,54,.20) 58%,rgba(7,32,58,.42)),url('./assets/eventos-landscape.svg');background-size:cover;background-position:center 43%;box-shadow:0 16px 38px rgba(18,49,78,.18)}
-.premium-header:after{background:linear-gradient(180deg,rgba(255,255,255,.04),transparent 45%,rgba(5,25,48,.15))}
+/* FOTO SUPERIOR: Café del Mar, exactamente la imagen elegida */
+.premium-header{min-height:220px;padding:calc(24px + env(safe-area-inset-top)) 14px 24px;background-image:linear-gradient(180deg,rgba(6,13,30,.10),rgba(10,17,40,.18) 48%,rgba(7,18,42,.54)),url('https://zuramaltaparty.com/wp-content/uploads/2023/07/cafe-del-mar-malta-fiesta-2023.jpeg');background-size:cover;background-position:center 46%;box-shadow:0 16px 38px rgba(18,49,78,.22)}
+.premium-header:after{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 43%,rgba(4,16,37,.18))}
 .header-line{margin-top:18px}
-.brand-copy h1{font-size:34px;letter-spacing:-1.2px;text-shadow:0 3px 18px rgba(7,25,44,.28)}
-.brand-copy p{font-size:12px;margin-top:8px;color:rgba(255,255,255,.92);text-shadow:0 2px 10px rgba(7,25,44,.25)}
-.settings-button{width:44px;height:44px;border-radius:15px;background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.33);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px rgba(8,27,49,.18)}
-.tabs{margin:28px -3px -47px;height:82px;border-radius:26px;background:rgba(255,255,255,.89);border-color:rgba(255,255,255,.94);box-shadow:0 20px 42px rgba(38,72,108,.18),inset 0 1px 0 rgba(255,255,255,.92)}
+.brand-copy h1{font-size:34px;letter-spacing:-1.2px;text-shadow:0 3px 18px rgba(0,0,0,.48)}
+.brand-copy p{font-size:12px;margin-top:8px;color:rgba(255,255,255,.94);text-shadow:0 2px 10px rgba(0,0,0,.50)}
+.settings-button{width:44px;height:44px;border-radius:15px;background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 24px rgba(8,27,49,.20)}
+.tabs{margin:28px -3px -47px;height:82px;border-radius:26px;background:rgba(255,255,255,.91);border-color:rgba(255,255,255,.96);box-shadow:0 20px 42px rgba(38,72,108,.18),inset 0 1px 0 rgba(255,255,255,.94)}
 .tab{height:82px;font-size:12px;gap:8px}
 .tab:after{left:25px;right:25px;height:4px}
 
@@ -25,14 +26,14 @@ body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 .metric{background:rgba(255,255,255,.78);border-color:rgba(255,255,255,.94)}
 .empty-state,.history-row,.event-list,.stats-strip>div{background:rgba(255,255,255,.80);border-color:rgba(255,255,255,.92)}
 
-/* Franja inferior con el mismo atardecer del diseño aprobado */
-.motivation{min-height:98px;margin-top:17px;border-radius:18px;padding:17px 16px;color:#fff;border:1px solid rgba(255,255,255,.30);background-image:linear-gradient(90deg,rgba(7,33,59,.66),rgba(9,42,70,.34) 55%,rgba(8,32,55,.45)),url('./assets/eventos-landscape.svg');background-size:cover;background-position:center 62%;box-shadow:0 16px 34px rgba(25,57,87,.18);overflow:hidden;position:relative}
-.motivation:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 48%,rgba(5,24,43,.14));pointer-events:none}
+/* FOTO INFERIOR: W Barcelona, exactamente la segunda imagen elegida */
+.motivation{min-height:104px;margin-top:18px;border-radius:19px;padding:18px 16px;color:#fff;border:1px solid rgba(255,255,255,.36);background-image:linear-gradient(90deg,rgba(9,19,42,.68),rgba(13,26,54,.25) 58%,rgba(9,17,38,.38)),url('https://youbarcelona.com/uploads/images/c/eclipse%20hotel%20w%20barcelona%20wet%20deck%206/original.jpg');background-size:cover;background-position:center 50%;box-shadow:0 16px 34px rgba(25,57,87,.20);overflow:hidden;position:relative}
+.motivation:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 48%,rgba(5,15,35,.16));pointer-events:none}
 .motivation-icon,.motivation>div:last-child{position:relative;z-index:1}
-.motivation-icon{background:rgba(255,255,255,.15)!important;color:#fff!important;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px)}
-.motivation strong{font-size:11.5px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.24)}
-.motivation span{font-size:9.5px;color:rgba(255,255,255,.86);text-shadow:0 2px 8px rgba(0,0,0,.20)}
+.motivation-icon{background:rgba(13,184,123,.78)!important;color:#fff!important;border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.motivation strong{font-size:11.5px;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.58)}
+.motivation span{font-size:9.5px;color:rgba(255,255,255,.93);text-shadow:0 2px 8px rgba(0,0,0,.58)}
 
-.bottom-nav{bottom:8px;background:rgba(255,255,255,.84);border-color:rgba(255,255,255,.94);box-shadow:0 16px 36px rgba(33,67,103,.18)}
+.bottom-nav{bottom:8px;background:rgba(255,255,255,.86);border-color:rgba(255,255,255,.96);box-shadow:0 16px 36px rgba(33,67,103,.18)}
 
-@media(max-width:370px){.premium-header{min-height:205px}.tabs{height:76px}.tab{height:76px}.content{padding-top:62px}.brand-copy h1{font-size:31px}.motivation{min-height:92px}}
+@media(max-width:370px){.premium-header{min-height:205px}.tabs{height:76px}.tab{height:76px}.content{padding-top:62px}.brand-copy h1{font-size:31px}.motivation{min-height:96px}}
