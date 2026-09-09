@@ -65,6 +65,10 @@ function eventProfit(slot){ return eventRevenue(slot) - expenseTotalForSlot(slot
 function totalRevenue(){ return sum(state.events); }
 function totalExpenses(){ return sum(state.expenses); }
 function totalProfit(){ return totalRevenue() - totalExpenses(); }
+function savingsTotalForPerson(name){
+  const wanted = String(name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  return sum(state.savings.filter(item => String(item.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase() === wanted));
+}
 function moneyClass(value){ return number(value) < 0 ? 'negative' : number(value) > 0 ? 'positive' : ''; }
 
 function header(){
@@ -119,6 +123,8 @@ function huchaView(){
   const goal = number(state.goal);
   const progress = Math.min(100, Math.max(0, Math.round(pct(total, goal))));
   const missing = Math.max(0, goal - total);
+  const fernandoSaved = savingsTotalForPerson('Fernando');
+  const joseSaved = savingsTotalForPerson('Jose');
   return `<section class="screen theme-purple">
     ${header()}
     <main class="content">
@@ -141,6 +147,32 @@ function huchaView(){
       <section class="list-section">
         <div class="section-head"><h2>Últimas aportaciones</h2>${clearButton('savings','purple')}</div>
         ${state.savings.length ? historyRows(state.savings,'savings') : emptyState('Todavía no hay aportaciones','Añade la primera cuando quieras.')}
+      </section>
+      <section class="person-contribution-section" aria-label="Aportación por persona">
+        <div class="person-contribution-head">
+          <div>
+            <h2>Aportación por persona</h2>
+            <p>Se actualiza automáticamente con cada aportación</p>
+          </div>
+        </div>
+        <div class="person-contribution-grid">
+          <article class="person-contribution-card fernando-card">
+            <div class="person-contribution-icon fernando-icon" aria-hidden="true">F</div>
+            <div class="person-contribution-copy">
+              <strong>Fernando</strong>
+              <span>Total aportado</span>
+              <b>${euro(fernandoSaved)}</b>
+            </div>
+          </article>
+          <article class="person-contribution-card jose-card">
+            <div class="person-contribution-icon jose-icon" aria-hidden="true">J</div>
+            <div class="person-contribution-copy">
+              <strong>Jose</strong>
+              <span>Total aportado</span>
+              <b>${euro(joseSaved)}</b>
+            </div>
+          </article>
+        </div>
       </section>
       <div class="motivation purple-motivation"><div class="motivation-icon">${icon('chart',20)}</div><div><strong>Cada aportación nos acerca al próximo evento.</strong><span>Disciplina hoy, mejores experiencias mañana.</span></div></div>
     </main>
@@ -297,7 +329,7 @@ function openForm(kind){
   }
   if(kind === 'add-saving'){
     openSheet('Añadir dinero','Ucha',`
-      <div class="field"><label>Concepto</label><input name="name" maxlength="50" value="Aportación" required></div>
+      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando">Fernando</option><option value="Jose">Jose</option></select></div>
       <div class="field"><label>Importe (€)</label><input name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
       <button class="sheet-submit purple-submit">Guardar aportación</button>`, fd => {
         state.savings.push({name:fd.get('name'),amount:number(fd.get('amount')),date:dateLabel()});
@@ -334,7 +366,7 @@ function openForm(kind){
 function openSettings(){
   openSheet('Ajustes','Eventos',`
     <div class="field"><label>Objetivo de la Ucha (€)</label><input name="goal" type="number" min="1" step="1" value="${state.goal}" required></div>
-    <p class="helper">Los datos se guardan en este dispositivo.</p>
+    <p class="helper">Los datos se sincronizan en vuestro espacio privado compartido.</p>
     <button class="sheet-submit">Guardar objetivo</button>
     <button type="button" class="danger-btn" id="resetAll">Borrar todos los datos</button>`, fd => {
       state.goal = number(fd.get('goal'));

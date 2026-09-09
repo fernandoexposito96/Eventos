@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#04382f"/>
+      <stop offset="0.46" stop-color="#006e58"/>
+      <stop offset="1" stop-color="#003f46"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#00a97e" stop-opacity=".4"/>
+      <stop offset=".58" stop-color="#10d79a" stop-opacity=".92"/>
+      <stop offset="1" stop-color="#6affd0"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#31e7b1"/>
+      <stop offset=".58" stop-color="#7fffd8"/>
+      <stop offset="1" stop-color="#b8fff0"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3ffc8"/>
+      <stop offset=".5" stop-color="#87f48c"/>
+      <stop offset="1" stop-color="#22d58e"/>
+    </linearGradient>
+    <radialGradient id="halo"><stop offset="0" stop-color="#5effcf" stop-opacity=".8"/><stop offset="1" stop-color="#5effcf" stop-opacity="0"/></radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="22"/></filter>
+  </defs>
+  <style>
+    .grid{opacity:.12}.bars rect{transform-box:fill-box;transform-origin:center bottom;animation:grow 4.5s ease-in-out infinite alternate}.bars rect:nth-child(2){animation-delay:.2s}.bars rect:nth-child(3){animation-delay:.4s}.bars rect:nth-child(4){animation-delay:.6s}.bars rect:nth-child(5){animation-delay:.8s}.bars rect:nth-child(6){animation-delay:1s}.bars rect:nth-child(7){animation-delay:1.2s}.trend{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 6.2s ease-in-out infinite}.dot{animation:pulse 2.6s ease-in-out infinite}.dot.d2{animation-delay:.35s}.dot.d3{animation-delay:.7s}.dot.d4{animation-delay:1.05s}.dot.d5{animation-delay:1.4s}.coins{animation:float 5.2s ease-in-out infinite}.spark{animation:twinkle 2.4s ease-in-out infinite alternate}
+    @keyframes grow{0%{transform:scaleY(.70);opacity:.56}100%{transform:scaleY(1);opacity:1}}@keyframes draw{0%{stroke-dashoffset:900;opacity:.18}48%,78%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-900;opacity:.22}}@keyframes pulse{0%,100%{opacity:.52}50%{opacity:1}}@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes twinkle{0%{opacity:.25}100%{opacity:.8}}@media(prefers-reduced-motion:reduce){.bars rect,.trend,.dot,.coins,.spark{animation:none!important}.trend{stroke-dashoffset:0}}
+  </style>
+  <rect width="900" height="560" rx="42" fill="url(#bg)"/>
+  <ellipse cx="765" cy="80" rx="250" ry="160" fill="#00e4a4" opacity=".13" filter="url(#soft)"/>
+  <ellipse cx="560" cy="460" rx="320" ry="150" fill="#2ee3c1" opacity=".10" filter="url(#soft)"/>
+  <g class="grid" stroke="#b7ffe8" stroke-width="1">
+    <path d="M330 70V430M410 70V430M490 70V430M570 70V430M650 70V430M730 70V430M810 70V430"/>
+    <path d="M310 100H860M310 160H860M310 220H860M310 280H860M310 340H860M310 400H860"/>
+  </g>
+  <g class="bars" opacity=".92">
+    <rect x="420" y="338" width="34" height="72" rx="8" fill="url(#bar)"/><rect x="474" y="312" width="34" height="98" rx="8" fill="url(#bar)"/><rect x="528" y="280" width="34" height="130" rx="8" fill="url(#bar)"/><rect x="582" y="238" width="34" height="172" rx="8" fill="url(#bar)"/><rect x="636" y="198" width="34" height="212" rx="8" fill="url(#bar)"/><rect x="690" y="154" width="34" height="256" rx="8" fill="url(#bar)"/><rect x="744" y="112" width="34" height="298" rx="8" fill="url(#bar)"/>
+  </g>
+  <path class="trend" d="M322 352 C370 344 398 302 444 315 C494 329 515 264 560 276 C612 291 629 219 675 226 C722 233 755 159 824 120" fill="none" stroke="url(#line)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <g fill="#dbfff4" filter="url(#glow)"><circle class="dot" cx="444" cy="315" r="6"/><circle class="dot d2" cx="560" cy="276" r="6"/><circle class="dot d3" cx="675" cy="226" r="6"/><circle class="dot d4" cx="756" cy="157" r="6"/><circle class="dot d5" cx="824" cy="120" r="7"/></g>
+  <g class="coins" opacity=".96">
+    <g transform="translate(685 362)"><ellipse cx="0" cy="0" rx="31" ry="10" fill="url(#coin)"/><rect x="-31" y="-17" width="62" height="17" fill="#1bcf90" opacity=".66"/><ellipse cx="0" cy="-17" rx="31" ry="10" fill="#b6ff9d"/></g>
+    <g transform="translate(746 349)"><ellipse cx="0" cy="0" rx="34" ry="11" fill="url(#coin)"/><rect x="-34" y="-37" width="68" height="37" fill="#15bd82" opacity=".68"/><ellipse cx="0" cy="-37" rx="34" ry="11" fill="#c2ffa5"/></g>
+    <g transform="translate(812 330)"><ellipse cx="0" cy="0" rx="36" ry="12" fill="url(#coin)"/><rect x="-36" y="-66" width="72" height="66" fill="#0eac77" opacity=".72"/><ellipse cx="0" cy="-66" rx="36" ry="12" fill="#d3ffad"/></g>
+  </g>
+  <circle cx="824" cy="120" r="70" fill="url(#halo)" opacity=".52"/>
+  <path d="M808 143 841 110m-10 0h10v10" fill="none" stroke="#ddfff6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <g class="spark" fill="#afffe7"><circle cx="510" cy="110" r="3"/><circle cx="610" cy="88" r="2.5"/><circle cx="705" cy="104" r="2"/><circle cx="540" cy="182" r="2"/></g>
+  <rect width="900" height="560" rx="42" fill="#002e2a" opacity=".06"/>
+</svg>

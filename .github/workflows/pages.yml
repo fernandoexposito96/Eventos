@@ -27,18 +27,27 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
-          node --check cloud-clean.js
+          node --check cloud.js
+          node --check access.js
+          node --check pwa.js
           node --check sw.js
-      - name: Validate clean entry build
+      - name: Validate final clean build
         run: |
-          grep -q "cloud-clean.js" index.html
-          ! grep -q "cloud-code.js" index.html
-          ! grep -q "cloud.css" index.html
-          ! grep -q "cloud-gate" index.html
-          ! grep -qi "password" index.html
-          ! grep -qi "email" index.html
-          ! grep -q "codeInviteInput" cloud-clean.js
-          ! grep -q "cloudAuthGate" cloud-clean.js
+          grep -q "cloud.js" index.html
+          grep -q "access.js" index.html
+          grep -q "styles.css" index.html
+          test -f manifest-v11.json
+          test -f apple-touch-icon-v13.png
+          test -f icon-192-v13.png
+          test -f icon-512-v13.png
+          ! test -e cloud-clean.js
+          ! test -e cloud-robust.js
+          ! test -e bootstrap.js
+          ! test -e visual-final.css
+          ! test -e access.css
+          ! test -e bottom-nav-final.css
+          ! test -e investment-bg-final.css
+          ! test -e benefits-bg-final.css
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

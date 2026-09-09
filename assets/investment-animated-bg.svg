@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07152f"/>
+      <stop offset="0.52" stop-color="#0b2d68"/>
+      <stop offset="1" stop-color="#351169"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#086ff5" stop-opacity=".45"/>
+      <stop offset=".58" stop-color="#229dff" stop-opacity=".94"/>
+      <stop offset="1" stop-color="#52d9ff"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8a5cff"/>
+      <stop offset=".55" stop-color="#38a8ff"/>
+      <stop offset="1" stop-color="#8df0ff"/>
+    </linearGradient>
+    <linearGradient id="coin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffdba0"/>
+      <stop offset=".5" stop-color="#ff9b67"/>
+      <stop offset="1" stop-color="#b964ff"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop offset="0" stop-color="#6b77ff" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#6b77ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <style>
+    .grid{opacity:.16}
+    .bars rect{transform-box:fill-box;transform-origin:center bottom;animation:grow 4.8s ease-in-out infinite alternate}
+    .bars rect:nth-child(2){animation-delay:.25s}.bars rect:nth-child(3){animation-delay:.5s}.bars rect:nth-child(4){animation-delay:.75s}.bars rect:nth-child(5){animation-delay:1s}.bars rect:nth-child(6){animation-delay:1.25s}.bars rect:nth-child(7){animation-delay:1.5s}
+    .trend{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 6.5s ease-in-out infinite}
+    .dot{animation:pulse 2.8s ease-in-out infinite}.dot.d2{animation-delay:.4s}.dot.d3{animation-delay:.8s}.dot.d4{animation-delay:1.2s}.dot.d5{animation-delay:1.6s}
+    .coins{animation:float 5.6s ease-in-out infinite}
+    @keyframes grow{0%{transform:scaleY(.72);opacity:.58}100%{transform:scaleY(1);opacity:1}}
+    @keyframes draw{0%{stroke-dashoffset:900;opacity:.18}48%,78%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-900;opacity:.25}}
+    @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+    @media (prefers-reduced-motion:reduce){.bars rect,.trend,.dot,.coins{animation:none!important}.trend{stroke-dashoffset:0}}
+  </style>
+
+  <rect width="900" height="520" rx="42" fill="url(#bg)"/>
+  <ellipse cx="790" cy="60" rx="220" ry="150" fill="#7548ff" opacity=".20" filter="url(#soft)"/>
+  <ellipse cx="590" cy="420" rx="300" ry="150" fill="#008dff" opacity=".13" filter="url(#soft)"/>
+
+  <g class="grid" stroke="#9bc8ff" stroke-width="1">
+    <path d="M350 60V430M430 60V430M510 60V430M590 60V430M670 60V430M750 60V430M830 60V430"/>
+    <path d="M320 100H860M320 160H860M320 220H860M320 280H860M320 340H860M320 400H860"/>
+  </g>
+
+  <g opacity=".9" class="bars">
+    <rect x="410" y="336" width="36" height="70" rx="8" fill="url(#bar)"/>
+    <rect x="466" y="308" width="36" height="98" rx="8" fill="url(#bar)"/>
+    <rect x="522" y="272" width="36" height="134" rx="8" fill="url(#bar)"/>
+    <rect x="578" y="224" width="36" height="182" rx="8" fill="url(#bar)"/>
+    <rect x="634" y="186" width="36" height="220" rx="8" fill="url(#bar)"/>
+    <rect x="690" y="146" width="36" height="260" rx="8" fill="url(#bar)"/>
+    <rect x="746" y="102" width="36" height="304" rx="8" fill="url(#bar)"/>
+  </g>
+
+  <g filter="url(#glow)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path class="trend" d="M330 352 C380 344 401 310 447 321 C498 333 516 260 566 274 C619 290 628 205 680 220 C732 235 753 149 824 118" stroke="url(#line)" stroke-width="7"/>
+  </g>
+  <g fill="#d8f4ff" filter="url(#glow)">
+    <circle class="dot" cx="447" cy="321" r="6"/><circle class="dot d2" cx="566" cy="274" r="6"/><circle class="dot d3" cx="680" cy="220" r="6"/><circle class="dot d4" cx="754" cy="161" r="6"/><circle class="dot d5" cx="824" cy="118" r="7"/>
+  </g>
+
+  <g class="coins" opacity=".92">
+    <g transform="translate(688 358)"><ellipse cx="0" cy="0" rx="31" ry="10" fill="url(#coin)"/><rect x="-31" y="-17" width="62" height="17" fill="#bc68ff" opacity=".55"/><ellipse cx="0" cy="-17" rx="31" ry="10" fill="#ffd09f"/></g>
+    <g transform="translate(748 346)"><ellipse cx="0" cy="0" rx="34" ry="11" fill="url(#coin)"/><rect x="-34" y="-35" width="68" height="35" fill="#bd69ff" opacity=".58"/><ellipse cx="0" cy="-35" rx="34" ry="11" fill="#ffd39f"/></g>
+    <g transform="translate(812 328)"><ellipse cx="0" cy="0" rx="36" ry="12" fill="url(#coin)"/><rect x="-36" y="-62" width="72" height="62" fill="#ac62ff" opacity=".6"/><ellipse cx="0" cy="-62" rx="36" ry="12" fill="#ffd7a7"/></g>
+  </g>
+
+  <circle cx="824" cy="118" r="66" fill="url(#halo)" opacity=".62"/>
+  <path d="M808 142 838 112m-8 0h8v8" fill="none" stroke="#d7f9ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
+  <rect width="900" height="520" rx="42" fill="url(#bg)" opacity=".12"/>
+</svg>
