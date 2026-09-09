@@ -1,0 +1,78 @@
+/* Ucha — referencia final 2026-09-10. Una sola composición de fondo, cabecera intacta. */
+.theme-purple.screen{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,#7594e7 0%,#7899e5 36%,#39577e 68%,#111a2a 100%)!important;
+}
+.theme-purple.screen::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:202px 0 0!important;
+  pointer-events:none!important;
+  z-index:0!important;
+  background-image:
+    linear-gradient(180deg,rgba(118,146,232,.80) 0%,rgba(113,145,225,.66) 26%,rgba(81,111,178,.30) 45%,rgba(25,34,55,.05) 64%,rgba(8,11,22,.14) 100%),
+    radial-gradient(120% 24% at 50% 17%,rgba(222,227,255,.95) 0%,rgba(164,177,255,.52) 36%,rgba(133,111,255,.12) 66%,transparent 100%),
+    url('https://youbarcelona.com/uploads/images/c/eclipse%20hotel%20w%20barcelona%20wet%20deck%206/original.jpg');
+  background-size:100% 100%,100% 100%,auto 62%;
+  background-position:center,center,center bottom;
+  background-repeat:no-repeat;
+}
+.theme-purple.screen::after{
+  content:"";
+  position:absolute;
+  left:-18%;
+  right:-18%;
+  top:252px;
+  height:300px;
+  z-index:0;
+  pointer-events:none;
+  border-radius:50%;
+  border-top:3px solid rgba(246,247,255,.58);
+  box-shadow:0 -7px 22px rgba(225,225,255,.55),0 -1px 8px rgba(131,88,255,.32);
+  transform:scaleY(.35);
+  opacity:.72;
+}
+.theme-purple .premium-header{position:relative;z-index:3}
+.theme-purple .content{position:relative;z-index:2;background:transparent!important}
+.theme-purple .tabs{z-index:6}
+.theme-purple .hero-panel.purple-panel{
+  background:linear-gradient(160deg,rgba(42,23,64,.98) 0%,rgba(28,17,47,.98) 48%,rgba(19,12,37,.99) 100%)!important;
+  background-image:linear-gradient(160deg,rgba(42,23,64,.98) 0%,rgba(28,17,47,.98) 48%,rgba(19,12,37,.99) 100%)!important;
+  border:1px solid rgba(185,148,255,.58)!important;
+  box-shadow:0 22px 48px rgba(37,20,75,.30),0 0 0 1px rgba(255,255,255,.06) inset,0 0 30px rgba(135,82,255,.18)!important;
+}
+.theme-purple .hero-panel.purple-panel::before{
+  background:radial-gradient(circle at 88% 5%,rgba(171,127,255,.16),transparent 55%)!important;
+}
+.theme-purple .list-section .section-head h2{
+  color:#fff!important;
+  text-shadow:0 2px 10px rgba(5,10,28,.72)!important;
+}
+.theme-purple .empty-state{
+  background:rgba(255,255,255,.96)!important;
+  border-color:rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 32px rgba(8,17,35,.18)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+}
+.theme-purple .person-contribution-section{
+  background:rgba(255,255,255,.95)!important;
+  border-color:rgba(255,255,255,.98)!important;
+  box-shadow:0 14px 30px rgba(8,17,35,.16)!important;
+}
+.theme-purple .motivation{
+  background:rgba(12,23,43,.84)!important;
+  background-image:linear-gradient(90deg,rgba(10,22,43,.92),rgba(12,24,46,.70))!important;
+  box-shadow:0 14px 28px rgba(8,15,30,.22)!important;
+}
+.theme-purple .bottom-nav{
+  background:rgba(255,255,255,.96)!important;
+  border-color:rgba(255,255,255,.99)!important;
+  box-shadow:0 12px 30px rgba(10,18,34,.18)!important;
+}
+@media(max-width:370px){
+  .theme-purple.screen::before{inset:188px 0 0!important;background-size:100% 100%,100% 100%,auto 60%}
+  .theme-purple.screen::after{top:236px}
+}
