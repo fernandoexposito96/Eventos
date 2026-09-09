@@ -1,15 +1,12 @@
-const CACHE_NAME = 'eventos-shell-v5';
-const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0';
+const CACHE_NAME = 'eventos-shell-v6';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css?v=20260909-color-v2',
-  './cloud.css?v=20260909-anonymous-v2',
+  './cloud.css?v=20260909-code-v1',
   './app.js?v=20260909-color-v2',
-  './cloud-robust.js?v=20260909-robust-v1',
-  './bootstrap.js?v=20260909-offline-v1',
-  './manifest.json',
-  SUPABASE_CDN
+  './cloud-code.js?v=20260909-code-v1',
+  './manifest.json'
 ];
 
 self.addEventListener('install', event => {
@@ -22,7 +19,8 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
 });
@@ -34,7 +32,7 @@ self.addEventListener('fetch', event => {
 
   if(request.mode === 'navigate'){
     event.respondWith(
-      fetch(request).then(response => {
+      fetch(request, { cache: 'no-store' }).then(response => {
         const copy = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy));
         return response;
@@ -43,19 +41,15 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  const cacheable = url.origin === self.location.origin || url.href === SUPABASE_CDN;
-  if(cacheable){
+  if(url.origin === self.location.origin){
     event.respondWith(
-      caches.match(request).then(cached => {
-        const network = fetch(request).then(response => {
-          if(response && (response.ok || response.type === 'opaque')){
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
-          }
-          return response;
-        }).catch(() => cached);
-        return cached || network;
-      })
+      fetch(request).then(response => {
+        if(response?.ok){
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+        }
+        return response;
+      }).catch(() => caches.match(request))
     );
   }
 });
