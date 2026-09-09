@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/Eventos/apple-touch-icon-v13.png?v=20260909-concert-v13-final" />
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/Eventos/apple-touch-icon-v13.png?v=20260909-concert-v13-final" />
   <link rel="icon" type="image/png" href="/Eventos/favicon-v13.png?v=20260909-concert-v13-final" />
-  <link rel="stylesheet" href="./styles.css?v=20260909-ucha-deep-clean-v2" />
+  <link rel="stylesheet" href="./styles.css?v=20260909-ucha-deep-clean-v3" />
 </head>
 <body class="access-locked">
   <section class="access-gate" id="accessGate" aria-label="Acceso privado a Eventos">
@@ -58,15 +58,16 @@
         <span class="eyebrow" id="sheetEyebrow">Eventos</span>
         <h2 id="sheetTitle">Añadir</h2>
       </div>
-      <button class="icon-button" id="closeSheet" aria-label="Cerrar">✕</button>
+      <button class="icon-button" id="closeSheet" type="button" aria-label="Cerrar">✕</button>
     </div>
-    <form id="sheetForm" class="sheet-form"></form>
+    <form class="sheet-form" id="sheetForm"></form>
   </section>
 
-  <script src="./pwa.js"></script>
-  <script src="./app.js?v=20260909-savings-person-v1"></script>
-  <script src="./cloud.js?v=20260909-shared-v2"></script>
-  <script src="./access.js?v=20260909-shared-v3"></script>
-  <script src="./delete-single.js?v=20260909-single-delete-v1"></script>
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="./access.js?v=20260909-access-v2"></script>
+  <script src="./cloud.js?v=20260909-shared-v3"></script>
+  <script src="./app.js?v=20260909-shared-v3"></script>
+  <script src="./pwa.js?v=20260909-pwa-v3"></script>
 </body>
 </html>
