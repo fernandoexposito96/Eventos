@@ -1,0 +1,11 @@
+{
+  "name": "Eventos",
+  "short_name": "Eventos",
+  "description": "Hucha, inversión y beneficios para tus eventos",
+  "lang": "es",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f8ff",
+  "theme_color": "#0d1238"
+}
