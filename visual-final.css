@@ -5,8 +5,8 @@ body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 .screen{position:relative;background:linear-gradient(180deg,rgba(237,246,253,.88) 0 205px,rgba(240,247,252,.96) 205px 100%)}
 .screen:before{content:"";position:absolute;inset:205px 0 0;pointer-events:none;background:radial-gradient(circle at 8% 16%,rgba(255,255,255,.72),transparent 23%),radial-gradient(circle at 88% 35%,rgba(183,216,246,.30),transparent 26%);z-index:0}
 
-/* FOTO SUPERIOR: tamaño normal, dejando respirar la imagen */
-.premium-header{min-height:190px;padding:calc(20px + env(safe-area-inset-top)) 14px 18px;background-image:linear-gradient(180deg,rgba(6,13,30,.08),rgba(10,17,40,.14) 48%,rgba(7,18,42,.42)),url('https://zuramaltaparty.com/wp-content/uploads/2023/07/cafe-del-mar-malta-fiesta-2023.jpeg');background-size:cover;background-position:center 48%;box-shadow:0 14px 34px rgba(18,49,78,.20);overflow:visible}
+/* FOTO SUPERIOR: un poco más alta para mostrar mejor la imagen */
+.premium-header{min-height:202px;padding:calc(20px + env(safe-area-inset-top)) 14px 18px;background-image:linear-gradient(180deg,rgba(6,13,30,.08),rgba(10,17,40,.14) 48%,rgba(7,18,42,.42)),url('https://zuramaltaparty.com/wp-content/uploads/2023/07/cafe-del-mar-malta-fiesta-2023.jpeg');background-size:cover;background-position:center 48%;box-shadow:0 14px 34px rgba(18,49,78,.20);overflow:visible}
 .premium-header:after{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 46%,rgba(4,16,37,.12))}
 .header-line{margin-top:8px}
 .brand-copy h1{font-size:28px;letter-spacing:-.9px;text-shadow:0 3px 18px rgba(0,0,0,.48)}
@@ -39,4 +39,4 @@ body{background:linear-gradient(180deg,#b9d1e6 0,#dce9f4 36%,#eef5fa 100%)}
 
 .bottom-nav{bottom:8px;background:rgba(255,255,255,.86);border-color:rgba(255,255,255,.96);box-shadow:0 16px 36px rgba(33,67,103,.18)}
 
-@media(max-width:370px){.premium-header{min-height:178px}.tabs{left:24px;right:24px;bottom:-26px;height:52px}.tab{height:52px;font-size:8.5px}.tab .svg-icon{width:14px;height:14px}.content{padding-top:41px}.brand-copy h1{font-size:26px}.brand-copy p{font-size:9.5px}.motivation{min-height:96px}}
+@media(max-width:370px){.premium-header{min-height:188px}.tabs{left:24px;right:24px;bottom:-26px;height:52px}.tab{height:52px;font-size:8.5px}.tab .svg-icon{width:14px;height:14px}.content{padding-top:41px}.brand-copy h1{font-size:26px}.brand-copy p{font-size:9.5px}.motivation{min-height:96px}}
