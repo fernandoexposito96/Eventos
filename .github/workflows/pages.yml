@@ -27,16 +27,18 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
-          node --check cloud-code.js
+          node --check cloud-clean.js
           node --check sw.js
-      - name: Validate active build
+      - name: Validate clean entry build
         run: |
-          grep -q "cloud-code.js" index.html
-          ! grep -q "cloud-robust.js" index.html
-          ! grep -q "bootstrap.js" index.html
-          ! grep -q "cloud-anonymous.js" index.html
-          ! grep -qi "password" cloud-code.js
-          ! grep -qi "email" cloud-code.js
+          grep -q "cloud-clean.js" index.html
+          ! grep -q "cloud-code.js" index.html
+          ! grep -q "cloud.css" index.html
+          ! grep -q "cloud-gate" index.html
+          ! grep -qi "password" index.html
+          ! grep -qi "email" index.html
+          ! grep -q "codeInviteInput" cloud-clean.js
+          ! grep -q "cloudAuthGate" cloud-clean.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
