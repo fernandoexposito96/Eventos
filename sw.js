@@ -1,4 +1,5 @@
-const CACHE_NAME = 'eventos-shell-v4';
+const CACHE_NAME = 'eventos-shell-v5';
+const SUPABASE_CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0';
 const APP_SHELL = [
   './',
   './index.html',
@@ -6,11 +7,17 @@ const APP_SHELL = [
   './cloud.css?v=20260909-anonymous-v2',
   './app.js?v=20260909-color-v2',
   './cloud-robust.js?v=20260909-robust-v1',
-  './manifest.json'
+  './bootstrap.js?v=20260909-offline-v1',
+  './manifest.json',
+  SUPABASE_CDN
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => Promise.allSettled(APP_SHELL.map(url => cache.add(url))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', event => {
@@ -36,11 +43,12 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  if(url.origin === self.location.origin){
+  const cacheable = url.origin === self.location.origin || url.href === SUPABASE_CDN;
+  if(cacheable){
     event.respondWith(
       caches.match(request).then(cached => {
         const network = fetch(request).then(response => {
-          if(response && response.ok){
+          if(response && (response.ok || response.type === 'opaque')){
             const copy = response.clone();
             caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
           }
