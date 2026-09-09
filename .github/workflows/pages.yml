@@ -24,6 +24,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Validate JavaScript
+        run: |
+          node --check app.js
+          node --check cloud-robust.js
+          node --check bootstrap.js
+          node --check sw.js
+      - name: Validate active build
+        run: |
+          grep -q "cloud-robust.js" index.html
+          grep -q "bootstrap.js" index.html
+          ! grep -q "cloud-anonymous.js" index.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
