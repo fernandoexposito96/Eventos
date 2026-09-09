@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Paisaje abstracto de montaña y lago al atardecer">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b4f8a"/>
+      <stop offset="0.42" stop-color="#2c6fba"/>
+      <stop offset="0.7" stop-color="#7d8fd0"/>
+      <stop offset="1" stop-color="#f0a08e"/>
+    </linearGradient>
+    <linearGradient id="sunset" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f5c5a6" stop-opacity="0"/>
+      <stop offset="0.72" stop-color="#ffd7a8" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#ffb18f" stop-opacity=".96"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ab7da" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#dbeaf4" stop-opacity=".98"/>
+    </linearGradient>
+    <linearGradient id="mountainA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#153c60"/>
+      <stop offset="1" stop-color="#0a2946"/>
+    </linearGradient>
+    <linearGradient id="mountainB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#315c79"/>
+      <stop offset="1" stop-color="#17384f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="78%" cy="38%" r="34%">
+      <stop offset="0" stop-color="#ffe5bd" stop-opacity=".92"/>
+      <stop offset=".42" stop-color="#f6bd9f" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#f6bd9f" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="26"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <path d="M0 430 175 278 335 405 505 248 695 420 865 322 1015 444 1195 300 1385 418 1600 285 1600 580 0 580Z" fill="url(#mountainB)" opacity=".82"/>
+  <path d="M0 500 190 350 355 500 540 325 720 505 900 378 1085 515 1270 385 1445 505 1600 420 1600 650 0 650Z" fill="url(#mountainA)" opacity=".92"/>
+  <rect y="548" width="1600" height="352" fill="url(#water)"/>
+  <path d="M0 625 C230 565 390 690 620 625 S1050 560 1600 625 L1600 900 0 900Z" fill="#d6e8f3" opacity=".46"/>
+  <path d="M0 710 C280 645 510 755 760 700 S1220 640 1600 715" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="7"/>
+  <ellipse cx="1270" cy="470" rx="210" ry="72" fill="#ffd9b5" opacity=".24" filter="url(#blur)"/>
+  <path d="M980 548 H1540" stroke="url(#sunset)" stroke-width="10" stroke-linecap="round" opacity=".62"/>
+  <circle cx="1250" cy="338" r="44" fill="#ffe9c9" opacity=".86"/>
+  <circle cx="1250" cy="338" r="104" fill="#ffd8b0" opacity=".18" filter="url(#blur)"/>
+</svg>
