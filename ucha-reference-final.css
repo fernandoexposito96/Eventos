@@ -39,10 +39,13 @@
   padding:48px 25px 34px!important;
   background:transparent!important;
   background-image:none!important;
+  display:flex!important;
+  flex-direction:column!important;
 }
 
 /* Tarjeta principal compacta como la referencia aprobada. */
 .theme-purple .hero-panel.purple-panel{
+  order:1!important;
   min-height:0!important;
   padding:18px 17px 18px!important;
   border-radius:24px!important;
@@ -87,19 +90,124 @@
 }
 .theme-purple .purple-panel .primary-button.purple::before{content:none!important;display:none!important}
 
-/* Solo queda Últimas aportaciones debajo de la tarjeta. */
+/* Contribuyentes — dos tarjetas automáticas como el prototipo. */
+.theme-purple .person-contribution-section{
+  display:block!important;
+  order:2!important;
+  margin-top:22px!important;
+  padding:0!important;
+  background:none!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.theme-purple .person-contribution-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 10px!important;
+}
+.theme-purple .person-contribution-head h2{
+  margin:0!important;
+  color:#17233a!important;
+  font-size:17px!important;
+  font-weight:800!important;
+  letter-spacing:-.25px!important;
+}
+.theme-purple .person-contribution-head p{display:none!important}
+.theme-purple .extract-link{
+  border:0!important;
+  background:transparent!important;
+  color:#684cff!important;
+  font-size:12px!important;
+  font-weight:800!important;
+  padding:5px 0!important;
+}
+.theme-purple .person-contribution-grid{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+}
+.theme-purple .person-contribution-card{
+  min-width:0!important;
+  min-height:92px!important;
+  padding:13px 12px!important;
+  border-radius:19px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  border:1px solid rgba(116,92,255,.08)!important;
+  box-shadow:0 10px 24px rgba(31,42,69,.07)!important;
+  background-image:none!important;
+}
+.theme-purple .person-contribution-card.fernando-card{background:linear-gradient(135deg,#fbf7ff 0%,#f1e9ff 100%)!important}
+.theme-purple .person-contribution-card.jose-card{background:linear-gradient(135deg,#f7faff 0%,#e9f0ff 100%)!important}
+.theme-purple .person-contribution-icon{
+  flex:0 0 43px!important;
+  width:43px!important;
+  height:43px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#fff!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  box-shadow:0 8px 16px rgba(55,58,110,.16)!important;
+}
+.theme-purple .fernando-icon{background:linear-gradient(145deg,#a54bf4,#7e2ad4)!important}
+.theme-purple .jose-icon{background:linear-gradient(145deg,#5479ff,#3155e9)!important}
+.theme-purple .person-contribution-copy{
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:1px!important;
+}
+.theme-purple .person-contribution-copy strong{
+  color:#14213a!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.theme-purple .person-contribution-copy span{
+  color:#74809a!important;
+  font-size:9px!important;
+  white-space:nowrap!important;
+}
+.theme-purple .person-contribution-copy b{
+  margin-top:3px!important;
+  color:#14213a!important;
+  font-size:15px!important;
+  font-weight:850!important;
+  white-space:nowrap!important;
+}
+
+/* Extracto / últimas aportaciones. */
 .theme-purple .list-section .text-button,
-.theme-purple .person-contribution-section,
 .theme-purple .motivation{display:none!important}
-.theme-purple .list-section{margin-top:22px!important;background:none!important;background-image:none!important}
+.theme-purple .list-section{
+  order:3!important;
+  margin-top:22px!important;
+  background:none!important;
+  background-image:none!important;
+}
 .theme-purple .list-section .section-head{margin-bottom:10px!important}
 .theme-purple .list-section .section-head h2{color:#17233a!important;font-size:17px!important;text-shadow:none!important}
+.theme-purple .history-list{display:grid!important;gap:8px!important}
+.theme-purple .history-row.savings{
+  border-radius:18px!important;
+  border:1px solid #e8ebf2!important;
+  background:#fff!important;
+  box-shadow:0 6px 18px rgba(22,34,57,.05)!important;
+}
+.theme-purple .history-value.savings{color:#0bb46d!important;font-weight:800!important}
+.theme-purple .single-delete-btn{background:#f4f5f8!important;border-radius:11px!important}
 .theme-purple .empty-state{
   min-height:132px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;
   border-radius:20px!important;padding:22px 16px!important;background:rgba(255,255,255,.97)!important;
-  background-image:none!important;border:1px solid rgba(255,255,255,.98)!important;
-  box-shadow:0 14px 32px rgba(8,17,35,.20)!important;
-  backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important;
+  background-image:none!important;border:1px solid #edf0f5!important;
+  box-shadow:0 14px 32px rgba(8,17,35,.08)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
 }
 .theme-purple .empty-state::before{background:#edf3ff!important;background-image:none!important;box-shadow:none!important}
 .theme-purple .empty-state strong{font-size:12px!important}
@@ -120,5 +228,10 @@
   .theme-purple .content{padding:42px 18px 30px!important}
   .theme-purple .purple-panel .hero-money{font-size:36px!important;margin-top:46px!important}
   .theme-purple .purple-panel .metric strong{font-size:12.5px!important}
+  .theme-purple .person-contribution-grid{gap:8px!important}
+  .theme-purple .person-contribution-card{padding:11px 9px!important}
+  .theme-purple .person-contribution-icon{width:38px!important;height:38px!important;flex-basis:38px!important}
+  .theme-purple .person-contribution-copy strong{font-size:12px!important}
+  .theme-purple .person-contribution-copy b{font-size:13px!important}
   .theme-purple .bottom-nav{width:calc(100% - 34px)!important}
 }
