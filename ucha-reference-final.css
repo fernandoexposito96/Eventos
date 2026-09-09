@@ -1,10 +1,11 @@
-/* Hucha — diseño final limpio. Fondo local nuevo + cabeceras conservadas. */
+/* Hucha — fondo blanco limpio. Cabeceras superior e inferior intactas. */
 .theme-purple.screen{
   position:relative!important;
   overflow:hidden!important;
   min-height:100dvh!important;
   padding-bottom:calc(92px + env(safe-area-inset-bottom))!important;
-  background:#6f7dbf url('/Eventos/assets/hucha-bg-final.jpg?v=20260910-hucha-bg-v3') center top/cover no-repeat!important;
+  background:#fff!important;
+  background-image:none!important;
 }
 
 /* No se permite que capas antiguas vuelvan a pintar fondos sobre Hucha. */
@@ -92,7 +93,7 @@
 .theme-purple .motivation{display:none!important}
 .theme-purple .list-section{margin-top:22px!important;background:none!important;background-image:none!important}
 .theme-purple .list-section .section-head{margin-bottom:10px!important}
-.theme-purple .list-section .section-head h2{color:#fff!important;font-size:17px!important;text-shadow:0 2px 10px rgba(6,10,28,.72)!important}
+.theme-purple .list-section .section-head h2{color:#17233a!important;font-size:17px!important;text-shadow:none!important}
 .theme-purple .empty-state{
   min-height:132px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;
   border-radius:20px!important;padding:22px 16px!important;background:rgba(255,255,255,.97)!important;
@@ -104,7 +105,7 @@
 .theme-purple .empty-state strong{font-size:12px!important}
 .theme-purple .empty-state p{font-size:10px!important}
 
-/* Navegación inferior conservada. */
+/* Navegación inferior conservada sin cambios. */
 .theme-purple .bottom-nav{
   bottom:8px!important;width:min(360px,calc(100% - 44px))!important;
   height:calc(58px + env(safe-area-inset-bottom))!important;
