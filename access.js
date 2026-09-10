@@ -1,6 +1,8 @@
 (() => {
   const SESSION_KEY = 'eventos-access-ok-v2';
-  const LOCAL_PIN = '1515';
+  const API = 'https://pyodzkmreynyxhvxstta.supabase.co/functions/v1/eventos-code-api';
+  const DEVICE_KEY = 'eventos-shared-device-v2';
+  const WORKSPACE_KEY = 'eventos-shared-workspace-v2';
   const body = document.body;
   const gate = document.getElementById('accessGate');
   const form = document.getElementById('accessForm');
@@ -23,7 +25,7 @@
       input.type = 'password';
       input.inputMode = 'numeric';
       input.maxLength = 4;
-      input.placeholder = 'Introduce 1515';
+      input.placeholder = 'Introduce el código';
       input.autocapitalize = 'off';
       if(submit) submit.innerHTML = 'Entrar <span aria-hidden="true">→</span>';
       if(eye) eye.hidden = false;
@@ -32,7 +34,7 @@
       input.type = 'text';
       input.inputMode = 'numeric';
       input.maxLength = 4;
-      input.placeholder = 'Código 1515';
+      input.placeholder = 'Código de 4 dígitos';
       input.autocapitalize = 'off';
       if(submit) submit.innerHTML = 'Vincular <span aria-hidden="true">→</span>';
       if(eye) eye.hidden = true;
@@ -81,6 +83,22 @@
     observer.observe(sheetForm,{childList:true,subtree:true});
   }
 
+  async function verifyPin(pin){
+    const workspace = (()=>{try{return JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'null')}catch{return null}})();
+    const deviceToken = localStorage.getItem(DEVICE_KEY) || '';
+    if(!workspace?.id || !/^[a-f0-9]{64}$/i.test(deviceToken)) throw new Error('Dispositivo no autorizado');
+    const response = await fetch(API, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'verify-pin',deviceToken,workspaceId:workspace.id,pin}),
+      cache:'no-store'
+    });
+    let data = {};
+    try{ data = await response.json(); }catch{}
+    if(!response.ok || data?.ok !== true) throw new Error(data?.error || 'Contraseña incorrecta');
+    return true;
+  }
+
   configureMode();
   if(isUnlocked() && isPaired()) unlock(); else lock();
 
@@ -89,11 +107,12 @@
     const value = String(input?.value || '').replace(/\s+/g,'');
     if(error) error.textContent = '';
 
+    if(!/^\d{4}$/.test(value)){
+      if(error) error.textContent = 'Introduce el código de 4 dígitos';
+      return;
+    }
+
     if(!isPaired()){
-      if(!/^\d{4}$/.test(value)){
-        if(error) error.textContent = 'Introduce el código de 4 dígitos';
-        return;
-      }
       try{
         if(submit){ submit.disabled = true; submit.textContent = 'Vinculando…'; }
         await window.EventosCloud.join(value);
@@ -108,15 +127,20 @@
       return;
     }
 
-    if(value === LOCAL_PIN){
+    try{
+      if(submit){ submit.disabled = true; submit.textContent = 'Comprobando…'; }
+      await verifyPin(value);
       unlock();
       return;
+    }catch(err){
+      if(error) error.textContent = String(err?.message || 'Contraseña incorrecta');
+      gate?.classList.remove('shake');
+      if(gate) void gate.offsetWidth;
+      gate?.classList.add('shake');
+      if(input){ input.value=''; input.focus(); }
+    }finally{
+      if(submit){ submit.disabled = false; submit.innerHTML = 'Entrar <span aria-hidden="true">→</span>'; }
     }
-    if(error) error.textContent = 'Contraseña incorrecta';
-    gate?.classList.remove('shake');
-    if(gate) void gate.offsetWidth;
-    gate?.classList.add('shake');
-    if(input){ input.value=''; input.focus(); }
   });
 
   eye?.addEventListener('click', () => {
