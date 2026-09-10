@@ -1,0 +1,38 @@
+name: One-time layout integrity pass
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/layout-integrity.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply layout integrity rules
+        run: python3 .github/scripts/layout-integrity.py
+      - name: Validate JavaScript
+        run: |
+          node --check app.js
+          node --check cloud.js
+          node --check access.js
+          node --check pwa.js
+          node --check sw.js
+      - name: Commit layout pass
+        run: |
+          git config user.name "Eventos Layout Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add styles.css
+          git commit -m "Align Eventos mobile layout and prevent overlaps"
+          git push
+      - name: Remove temporary files
+        run: |
+          git pull --rebase
+          git rm .github/scripts/layout-integrity.py .github/workflows/layout-integrity.yml
+          git commit -m "Remove temporary layout integrity files"
+          git push
