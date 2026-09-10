@@ -1,0 +1,28 @@
+name: One-time three layout fixes
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-three-layout-issues.yml'
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply fixes
+        run: python .github/scripts/fix-three-layout-issues.py
+      - name: Validate JavaScript
+        run: node --check app.js && node --check cloud.js && node --check access.js && node --check pwa.js
+      - name: Commit fixes
+        run: |
+          git config user.name "Eventos Layout Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add styles.css index.html
+          git diff --cached --quiet || git commit -m "Fix chart spacing, bottom nav overlap and iPhone safe area"
+          git push
+      - name: Remove temporary files
+        run: |
+          git rm .github/scripts/fix-three-layout-issues.py .github/workflows/fix-three-layout-issues.yml
+          git commit -m "Remove temporary three-layout-fixes files"
+          git push
