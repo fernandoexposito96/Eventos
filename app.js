@@ -31,15 +31,24 @@ function icon(name, size = 22){
   return `<svg class="svg-icon" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] || paths.calendar}</svg>`;
 }
 
+function makeId(prefix,index){
+  return crypto.randomUUID?.() || `${prefix}-${Date.now()}-${index}-${Math.random().toString(16).slice(2)}`;
+}
+
+function canonicalPerson(name){
+  return String(name || '') === 'Jose' ? 'José' : String(name || '');
+}
+
 function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
     const saved = raw ? JSON.parse(raw) : null;
-    const expenses = Array.isArray(saved?.expenses) ? saved.expenses.map(item => ({...item,eventSlot:Number(item.eventSlot)||0})) : [];
-    const events = Array.isArray(saved?.events) ? saved.events.map((item,index) => ({...item,slot:Number(item.slot)||Math.min(index+1,5)})) : [];
+    const savings = Array.isArray(saved?.savings) ? saved.savings.map((item,index) => ({...item,id:item.id || makeId('saving',index),name:canonicalPerson(item.name)})) : [];
+    const expenses = Array.isArray(saved?.expenses) ? saved.expenses.map((item,index) => ({...item,id:item.id || makeId('expense',index),eventSlot:Number(item.eventSlot)||0})) : [];
+    const events = Array.isArray(saved?.events) ? saved.events.map((item,index) => ({...item,id:item.id || makeId('event',index),slot:Number(item.slot)||Math.min(index+1,5)})) : [];
     return {
       goal: Number(saved?.goal) > 0 ? Number(saved.goal) : defaults.goal,
-      savings: Array.isArray(saved?.savings) ? saved.savings : [],
+      savings,
       expenses,
       events
     };
@@ -100,21 +109,18 @@ function emptyState(title,subtitle){
   return `<div class="empty-state"><strong>${title}</strong><p>${subtitle}</p></div>`;
 }
 
-function clearButton(key, theme){
-  return `<button class="text-button ${theme}" data-clear="${key}" aria-label="Vaciar historial">${icon('trash',14)}<span>Vaciar</span></button>`;
-}
-
 function historyRows(list,type){
   if(!list.length) return '';
   const sign = type === 'expenses' ? '−' : '+';
-  return `<div class="history-list">${[...list].reverse().slice(0,8).map((item,index) => `
+  const visible = [...list].reverse().slice(0,8);
+  return `<div class="history-list">${visible.map((item,index) => `
     <article class="history-row ${type}">
       <div class="history-avatar avatar-${index%4}">${initials(item.name || item.category || 'EV')}</div>
       <div class="history-copy">
         <strong>${clean(item.name || item.category || 'Movimiento')}</strong>
         <small>${clean(item.date || '')}${item.category ? ` · ${clean(item.category)}` : ''}${item.eventSlot ? ` · ${slotLabels[item.eventSlot-1]}` : ''}</small>
       </div>
-      <div class="history-value ${type}">${sign}${euro(item.amount)}</div>
+      <div class="history-value ${type}"><span>${sign}${euro(item.amount)}</span><button type="button" class="single-delete-btn" data-delete-type="${type}" data-delete-id="${clean(item.id)}" aria-label="Borrar solo este movimiento">${icon('trash',14)}</button></div>
     </article>`).join('')}</div>`;
 }
 
@@ -124,7 +130,7 @@ function huchaView(){
   const progress = Math.min(100, Math.max(0, Math.round(pct(total, goal))));
   const missing = Math.max(0, goal - total);
   const fernandoSaved = savingsTotalForPerson('Fernando');
-  const joseSaved = savingsTotalForPerson('Jose');
+  const joseSaved = savingsTotalForPerson('José');
   return `<section class="screen theme-purple">
     ${header()}
     <main class="content">
@@ -145,15 +151,16 @@ function huchaView(){
         <button class="primary-button purple" data-action="add-saving">${icon('plus',20)}Añadir dinero</button>
       </section>
       <section class="list-section">
-        <div class="section-head"><h2>Últimas aportaciones</h2>${clearButton('savings','purple')}</div>
+        <div class="section-head"><h2>Últimas aportaciones</h2></div>
         ${state.savings.length ? historyRows(state.savings,'savings') : emptyState('Todavía no hay aportaciones','Añade la primera cuando quieras.')}
       </section>
-      <section class="person-contribution-section" aria-label="Aportación por persona">
+      <section class="person-contribution-section" aria-label="Contribuyentes">
         <div class="person-contribution-head">
           <div>
-            <h2>Aportación por persona</h2>
+            <h2>Contribuyentes</h2>
             <p>Se actualiza automáticamente con cada aportación</p>
           </div>
+          <button class="extract-link" type="button" data-view-extract>Ver extracto</button>
         </div>
         <div class="person-contribution-grid">
           <article class="person-contribution-card fernando-card">
@@ -167,7 +174,7 @@ function huchaView(){
           <article class="person-contribution-card jose-card">
             <div class="person-contribution-icon jose-icon" aria-hidden="true">J</div>
             <div class="person-contribution-copy">
-              <strong>Jose</strong>
+              <strong>José</strong>
               <span>Total aportado</span>
               <b>${euro(joseSaved)}</b>
             </div>
@@ -205,7 +212,7 @@ function inversionView(){
         <button class="primary-button blue" data-action="add-expense">${icon('plus',20)}Añadir inversión</button>
       </section>
       <section class="list-section compact-top">
-        <div class="section-head"><h2>Últimas operaciones</h2>${clearButton('expenses','blue')}</div>
+        <div class="section-head"><h2>Últimas operaciones</h2></div>
         <div class="filter-row">${['Todos','Material','Catering','Local','Otros'].map(filter => `<button class="chip ${expenseFilter===filter?'active':''}" data-filter="${filter}">${filter}</button>`).join('')}</div>
         ${filtered.length ? historyRows(filtered,'expenses') : emptyState('No hay inversiones','Añade una inversión y, si quieres, asígnala a un evento.')}
       </section>
@@ -230,6 +237,7 @@ function eventList(){
       <span class="event-index event-color-${slot}">${icon('calendar',15)}</span>
       <span class="event-name"><strong>${clean(event?.name || label)}</strong><small>${event ? clean(event.date || '') : 'Sin registrar'}</small></span>
       <span class="event-profit ${moneyClass(profit)}">${event ? euro(profit) : '—'}</span>
+      ${event ? `<span class="single-event-delete" role="button" tabindex="0" data-delete-event-slot="${slot}" aria-label="Borrar solo este evento">${icon('trash',14)}</span>` : ''}
     </button>`;
   }).join('')}</div>`;
 }
@@ -266,7 +274,7 @@ function beneficiosView(){
         </div>
       </section>
       <section class="list-section compact-top">
-        <div class="section-head"><h2>Últimos eventos</h2>${clearButton('events','green')}</div>
+        <div class="section-head"><h2>Últimos eventos</h2></div>
         ${eventList()}
       </section>
       <section class="summary-section">
@@ -279,24 +287,52 @@ function beneficiosView(){
   </section>`;
 }
 
+function removeItem(type,id){
+  if(!['savings','expenses'].includes(type)) return;
+  const list = state[type] || [];
+  const index = list.findIndex(item => String(item.id || '') === String(id || ''));
+  if(index < 0){ toast('No se encontró ese movimiento'); return; }
+  if(!confirm('¿Borrar solo este movimiento?')) return;
+  list.splice(index,1);
+  saveState();
+  render();
+  toast('Movimiento eliminado');
+}
+
+function removeEvent(slot){
+  const item = eventForSlot(slot);
+  if(!item) return;
+  if(!confirm('¿Borrar solo este evento?')) return;
+  state.events = state.events.filter(row => Number(row.slot) !== Number(slot));
+  saveState();
+  render();
+  toast('Evento eliminado');
+}
+
 function render(){
   app.innerHTML = active === 'hucha' ? huchaView() : active === 'inversion' ? inversionView() : beneficiosView();
   app.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => { active = button.dataset.tab; render(); }));
   app.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => openAction(button.dataset.action)));
   app.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { expenseFilter = button.dataset.filter; render(); }));
   app.querySelectorAll('[data-event-slot]').forEach(button => button.addEventListener('click', () => { selectedEventSlot = Number(button.dataset.eventSlot); render(); }));
+  app.querySelectorAll('[data-delete-id]').forEach(button => button.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    removeItem(button.dataset.deleteType,button.dataset.deleteId);
+  }));
+  app.querySelectorAll('[data-delete-event-slot]').forEach(button => {
+    const run = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      removeEvent(Number(button.dataset.deleteEventSlot));
+    };
+    button.addEventListener('click',run);
+    button.addEventListener('keydown',event => { if(event.key === 'Enter' || event.key === ' ') run(event); });
+  });
+  app.querySelector('[data-view-extract]')?.addEventListener('click', () => {
+    app.querySelector('.theme-purple .list-section')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
   document.getElementById('settingsBtn')?.addEventListener('click', openSettings);
-  document.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click', () => clearList(button.dataset.clear)));
-}
-
-function clearList(key){
-  const labels = { savings:'aportaciones', expenses:'inversiones', events:'eventos' };
-  if(!confirm(`¿Vaciar ${labels[key] || 'historial'}?`)) return;
-  if(key === 'events') state.events = [];
-  else state[key] = [];
-  saveState();
-  render();
-  toast('Historial actualizado');
 }
 
 function openAction(action){
@@ -334,11 +370,11 @@ function openGoal(){
 
 function openSaving(){
   openSheet('Hucha','Añadir dinero',`
-      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando">Fernando</option><option value="Jose">Jose</option></select></div>
+      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando">Fernando</option><option value="José">José</option></select></div>
       ${field('Cantidad','amount','number','','min="0.01" step="0.01"')}
       ${field('Fecha','date','date',new Date().toISOString().slice(0,10))}
       <button class="sheet-submit purple">Añadir aportación</button>`, data => {
-        state.savings.push({id:crypto.randomUUID?.() || String(Date.now()), name:String(data.get('name')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel())});
+        state.savings.push({id:crypto.randomUUID?.() || String(Date.now()), name:canonicalPerson(data.get('name')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel())});
         saveState(); closeSheet(); render(); toast('Aportación añadida');
       });
 }
