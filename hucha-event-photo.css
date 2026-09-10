@@ -1,12 +1,12 @@
-/* Hucha — fusion visual del teatro/evento dentro de la tarjeta principal.
-   Capa final: no cambia cabecera, navegación, cálculos ni botones. */
+/* Hucha — foto del evento integrada dentro de la tarjeta principal.
+   Corrección v2: imagen nítida, rectangular y sin heredar máscaras/círculos antiguos. */
 .theme-purple .hero-panel.purple-panel{
   position:relative!important;
   overflow:hidden!important;
   isolation:isolate!important;
 }
 
-/* Foto real del evento integrada en la zona central de la tarjeta. */
+/* Foto real, a resolución alta, solo en la franja central de la tarjeta. */
 .theme-purple .hero-panel.purple-panel::before{
   content:""!important;
   display:block!important;
@@ -14,19 +14,35 @@
   left:0!important;
   right:0!important;
   top:76px!important;
-  height:218px!important;
+  bottom:auto!important;
+  width:100%!important;
+  max-width:none!important;
+  height:224px!important;
+  aspect-ratio:auto!important;
   z-index:0!important;
   pointer-events:none!important;
-  background-image:url('./assets/hucha-card-eventos-20260910.jpg')!important;
+
+  background-color:transparent!important;
+  background-image:url('./assets/hucha-card-eventos-sharp-20260910.jpg')!important;
   background-repeat:no-repeat!important;
   background-size:cover!important;
-  background-position:center center!important;
+  background-position:center 50%!important;
+
   opacity:1!important;
   border:0!important;
+  border-radius:0!important;
   box-shadow:none!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  transform:none!important;
+  clip-path:none!important;
+  -webkit-clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
 }
 
-/* Degradado para que la foto quede fundida con el morado y el texto siga legible. */
+/* Degradado de fusión: oscurece los extremos pero deja la fotografía limpia y definida. */
 .theme-purple .hero-panel.purple-panel::after{
   content:""!important;
   display:block!important;
@@ -34,18 +50,34 @@
   left:0!important;
   right:0!important;
   top:72px!important;
-  height:232px!important;
+  bottom:auto!important;
+  width:100%!important;
+  max-width:none!important;
+  height:236px!important;
+  aspect-ratio:auto!important;
   z-index:1!important;
   pointer-events:none!important;
+
   background:linear-gradient(180deg,
-    rgba(40,24,59,.94) 0%,
-    rgba(37,22,57,.52) 16%,
-    rgba(28,17,46,.13) 39%,
-    rgba(25,15,42,.20) 63%,
-    rgba(28,18,45,.90) 90%,
-    rgba(31,21,49,.98) 100%)!important;
+    rgba(43,25,64,.94) 0%,
+    rgba(38,22,59,.45) 18%,
+    rgba(26,16,43,.08) 38%,
+    rgba(24,14,40,.12) 61%,
+    rgba(28,17,45,.78) 84%,
+    rgba(31,20,49,.98) 100%)!important;
+
+  opacity:1!important;
   border:0!important;
+  border-radius:0!important;
   box-shadow:none!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  transform:none!important;
+  clip-path:none!important;
+  -webkit-clip-path:none!important;
+  mask:none!important;
+  -webkit-mask:none!important;
 }
 
 .theme-purple .hero-panel.purple-panel > *{
@@ -54,22 +86,22 @@
 }
 
 .theme-purple .purple-panel .hero-money{
-  text-shadow:0 4px 20px rgba(0,0,0,.68)!important;
+  text-shadow:0 3px 14px rgba(0,0,0,.62)!important;
 }
 .theme-purple .purple-panel .goal-line{
-  text-shadow:0 2px 10px rgba(0,0,0,.58)!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.50)!important;
 }
 .theme-purple .purple-panel .progress-track{
-  box-shadow:inset 0 1px 5px rgba(0,0,0,.48),0 1px 0 rgba(255,255,255,.08)!important;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.42),0 1px 0 rgba(255,255,255,.08)!important;
 }
 
 @media(max-width:370px){
   .theme-purple .hero-panel.purple-panel::before{
     top:72px!important;
-    height:205px!important;
+    height:211px!important;
   }
   .theme-purple .hero-panel.purple-panel::after{
     top:68px!important;
-    height:219px!important;
+    height:223px!important;
   }
 }
