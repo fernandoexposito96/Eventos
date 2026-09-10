@@ -240,6 +240,45 @@ function huchaView(){
   </section>`;
 }
 
+function investmentInsights(){
+  const items = [...state.expenses].sort((a,b) => String(a.date || '').localeCompare(String(b.date || '')));
+  const invested = totalExpenses();
+  const revenue = totalRevenue();
+  const available = revenue - invested;
+  const categories = ['Material','Catering','Local','Otros'];
+  const categoryTotals = categories.map(category => ({category,total:sum(state.expenses.filter(item => item.category === category))}));
+  const categoryMax = Math.max(1,...categoryTotals.map(item => item.total));
+
+  let running = 0;
+  const values = [0,...items.map(item => (running += number(item.amount)))];
+  const max = Math.max(1,...values);
+  const last = values.length - 1;
+  const coords = values.map((value,index) => {
+    const x = last ? 8 + (index / last) * 284 : 150;
+    const y = 82 - (value / max) * 62;
+    return [x.toFixed(1),y.toFixed(1)];
+  });
+  const points = coords.map(point => point.join(',')).join(' ');
+  const finalPoint = coords[coords.length-1] || ['8','82'];
+
+  return `<section class="investment-insights" aria-label="Resumen visual de inversión">
+    <section class="insight-card investment-evolution">
+      <div class="insight-head"><div><span>Evolución</span><h3>Inversión en el tiempo</h3></div><strong>${euro(invested)}</strong></div>
+      ${items.length ? `<svg class="investment-chart" viewBox="0 0 300 92" role="img" aria-label="Evolución de la inversión"><line x1="8" y1="82" x2="292" y2="82" class="investment-axis"></line><polyline points="${points}" class="investment-line"></polyline><circle cx="${finalPoint[0]}" cy="${finalPoint[1]}" r="4" class="investment-dot"></circle></svg><div class="investment-chart-foot"><span>${items.length} ${items.length===1?'operación':'operaciones'}</span><span>Total ${euro(invested)}</span></div>` : `<div class="investment-chart-empty">La evolución aparecerá con la primera inversión.</div>`}
+    </section>
+
+    <section class="investment-budget-card">
+      <div><span class="investment-kicker">Presupuesto disponible</span><strong class="${moneyClass(available)}">${euro(available)}</strong><small>Ingresos ${euro(revenue)} · Invertido ${euro(invested)}</small></div>
+      <div class="investment-budget-ring" style="--budget-progress:${Math.min(100, revenue>0 ? invested/revenue*100 : 0).toFixed(1)}%"><span>${revenue>0 ? Math.round(invested/revenue*100) : 0}%</span></div>
+    </section>
+
+    <section class="insight-card investment-category-card">
+      <div class="insight-head"><div><span>Distribución</span><h3>Inversión por categoría</h3></div>${icon('chart',19)}</div>
+      <div class="investment-category-bars">${categoryTotals.map(item => `<div class="investment-category-row"><div class="investment-category-copy"><span>${item.category}</span><strong>${euro(item.total)}</strong></div><div class="investment-category-track"><span style="width:${item.total>0 ? Math.max(5,Math.round(item.total/categoryMax*100)) : 0}%"></span></div></div>`).join('')}</div>
+    </section>
+  </section>`;
+}
+
 function inversionView(){
   const invested = totalExpenses();
   const profit = totalProfit();
@@ -264,6 +303,7 @@ function inversionView(){
         </div>
         <button class="primary-button blue" data-action="add-expense">${icon('plus',20)}Añadir inversión</button>
       </section>
+      ${investmentInsights()}
       <section class="list-section compact-top">
         <div class="section-head"><h2>Últimas operaciones</h2>${historyButton('expenses')}</div>
         <div class="filter-row">${['Todos','Material','Catering','Local','Otros'].map(filter => `<button class="chip ${expenseFilter===filter?'active':''}" data-filter="${filter}">${filter}</button>`).join('')}</div>
