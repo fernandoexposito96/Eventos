@@ -1,0 +1,23 @@
+name: One-time Beneficios investment refinement
+on:
+  push:
+    paths:
+      - '.github/workflows/refine-benefits-link.yml'
+permissions:
+  contents: write
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Refine Beneficios logic and layout
+        run: python .github/scripts/refine-benefits-link.py
+      - name: Validate JavaScript
+        run: node --check app.js
+      - name: Commit changes
+        run: |
+          git config user.name "Eventos Benefits Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app.js styles.css
+          git diff --cached --quiet || git commit -m "Refine Beneficios investment assignment and ROI"
+          git push
