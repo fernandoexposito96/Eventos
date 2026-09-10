@@ -46,7 +46,7 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_KEY);
     const saved = raw ? JSON.parse(raw) : null;
     const savings = Array.isArray(saved?.savings) ? saved.savings.map((item,index) => ({...item,id:item.id || makeId('saving',index),name:canonicalPerson(item.name)})) : [];
-    const expenses = Array.isArray(saved?.expenses) ? saved.expenses.map((item,index) => ({...item,id:item.id || makeId('expense',index),eventSlot:Number(item.eventSlot)||0})) : [];
+    const expenses = Array.isArray(saved?.expenses) ? saved.expenses.map((item,index) => ({...item,id:item.id || makeId('expense',index),category:item.category==='Catering'?'Alcohol':item.category,eventSlot:Number(item.eventSlot)||0})) : [];
     const events = Array.isArray(saved?.events) ? saved.events.map((item,index) => ({...item,id:item.id || makeId('event',index),slot:Number(item.slot)||Math.min(index+1,5)})) : [];
     return {
       goal: Number(saved?.goal) > 0 ? Number(saved.goal) : defaults.goal,
@@ -72,10 +72,14 @@ function eventForSlot(slot){ return state.events.find(item => Number(item.slot) 
 function expensesForSlot(slot){ return state.expenses.filter(item => Number(item.eventSlot) === Number(slot)); }
 function expenseTotalForSlot(slot){ return sum(expensesForSlot(slot)); }
 function eventRevenue(slot){ return number(eventForSlot(slot)?.amount); }
-function eventProfit(slot){ return eventRevenue(slot) - expenseTotalForSlot(slot); }
+function eventProfit(slot){ return eventForSlot(slot) ? eventRevenue(slot) - expenseTotalForSlot(slot) : 0; }
 function totalRevenue(){ return sum(state.events); }
 function totalExpenses(){ return sum(state.expenses); }
-function totalProfit(){ return totalRevenue() - totalExpenses(); }
+function registeredEventExpenses(){ return state.expenses.filter(item => Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot))); }
+function pendingExpenses(){ return state.expenses.filter(item => !(Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot)))); }
+function registeredExpenseTotal(){ return sum(registeredEventExpenses()); }
+function pendingExpenseTotal(){ return sum(pendingExpenses()); }
+function totalProfit(){ return totalRevenue() - registeredExpenseTotal(); }
 function savingsTotalForPerson(name){
   const wanted = String(name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   return sum(state.savings.filter(item => String(item.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase() === wanted));
@@ -337,12 +341,20 @@ function eventList(){
 
 function beneficiosView(){
   const event = eventForSlot(selectedEventSlot);
-  const revenue = eventRevenue(selectedEventSlot);
-  const invested = expenseTotalForSlot(selectedEventSlot);
-  const profit = eventProfit(selectedEventSlot);
+  const revenue = event ? eventRevenue(selectedEventSlot) : 0;
+  const invested = event ? expenseTotalForSlot(selectedEventSlot) : 0;
+  const profit = event ? eventProfit(selectedEventSlot) : 0;
   const total = totalProfit();
   const count = state.events.length;
   const avg = count ? total / count : 0;
+  const pending = pendingExpenseTotal();
+  const roi = event && invested > 0 ? (profit / invested) * 100 : null;
+  const categories = ['Material','Alcohol','Local','Otros'];
+  const categoryRows = categories.map(category => ({
+    category,
+    total: event ? sum(expensesForSlot(selectedEventSlot).filter(item => (item.category==='Catering'?'Alcohol':item.category) === category)) : 0
+  }));
+  const categoryMax = Math.max(1,...categoryRows.map(item => item.total));
   return `<section class="screen theme-green">
     ${header()}
     <main class="content">
@@ -356,9 +368,13 @@ function beneficiosView(){
           <div class="event-detail-head"><span class="detail-icon">${icon('calendar',18)}</span><div><strong>${clean(event?.name || `Evento ${selectedEventSlot}`)}</strong><small>${clean(event?.date || 'Sin registrar')}</small></div></div>
           <div class="metric-grid two event-metrics">
             <div class="metric"><strong>${euro(revenue)}</strong><span>Ingresos del evento</span></div>
-            <div class="metric"><strong class="negative-if-value">${euro(invested)}</strong><span>Inversión del evento</span></div>
+            <div class="metric"><strong class="${event && invested>0?'negative':''}">${euro(invested)}</strong><span>Inversión del evento</span></div>
             <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Beneficio del evento</span></div>
             <div class="metric"><strong class="${moneyClass(total)}">${euro(total)}</strong><span>Beneficio total</span></div>
+          </div>
+          <div class="benefits-roi-row">
+            <div><span>Rentabilidad (ROI)</span><strong class="${roi===null?'':moneyClass(roi)}">${roi===null ? (event ? 'Sin inversión' : 'Sin calcular') : `${roi>=0?'+':''}${roi.toFixed(1).replace('.',',')}%`}</strong></div>
+            <small>${event ? (invested>0 ? 'Beneficio ÷ inversión' : 'Añade inversión para calcularla') : 'Registra este evento para activar sus resultados'}</small>
           </div>
           <div class="event-actions">
             <button class="secondary-button green" data-action="edit-event">${event ? 'Editar evento' : 'Añadir evento'}</button>
@@ -366,6 +382,17 @@ function beneficiosView(){
           </div>
         </div>
       </section>
+
+      ${pending>0 ? `<section class="pending-investment-card">
+        <div class="pending-investment-icon">${icon('chart',20)}</div>
+        <div class="pending-investment-copy"><span>Inversión pendiente de asignar</span><strong>${euro(pending)}</strong><small>No cuenta como pérdida en Beneficios hasta estar vinculada a un evento registrado.</small></div>
+      </section>` : ''}
+
+      ${event && invested>0 ? `<section class="insight-card benefits-breakdown-card">
+        <div class="insight-head"><div><span>Desglose</span><h3>Inversión de este evento</h3></div><strong>${euro(invested)}</strong></div>
+        <div class="benefits-category-bars">${categoryRows.map(item => `<div class="benefits-category-row"><div class="benefits-category-copy"><span>${item.category}</span><strong>${euro(item.total)}</strong></div><div class="benefits-category-track"><span style="width:${item.total>0?Math.max(5,Math.round(item.total/categoryMax*100)):0}%"></span></div></div>`).join('')}</div>
+      </section>` : ''}
+
       <section class="list-section compact-top">
         <div class="section-head"><h2>Últimos eventos</h2></div>
         ${eventList()}
@@ -373,7 +400,7 @@ function beneficiosView(){
       ${profitComparisonChart()}
       <section class="summary-section">
         <div class="summary-card"><span>Beneficio total</span><strong class="${moneyClass(total)}">${euro(total)}</strong></div>
-        <div class="summary-card"><span>Media por evento</span><strong class="${moneyClass(avg)}">${euro(avg)}</strong></div>
+        <div class="summary-card"><span>Media por evento</span><strong class="${count?moneyClass(avg):'summary-empty-value'}">${count ? euro(avg) : 'Sin media todavía'}</strong></div>
       </section>
       <div class="motivation green-motivation"><div class="motivation-icon">${icon('trend',20)}</div><div><strong>Lo importante no es solo ganar, sino crear algo que la gente recuerde.</strong><span>Cada evento es una nueva oportunidad para crecer.</span></div></div>
     </main>
