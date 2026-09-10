@@ -9,7 +9,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f5f8ff",
-  "theme_color": "#0d1238",
+  "theme_color": "#eef1f4",
   "icons": [
     {
       "src": "/Eventos/apple-touch-icon-v13.png",
