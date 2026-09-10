@@ -120,7 +120,7 @@ function historyRows(list,type,limit=8){
     <article class="history-row ${type}">
       <div class="history-avatar avatar-${index%4}">${initials(item.name || item.category || 'EV')}</div>
       <div class="history-copy">
-        <strong>${clean(item.name || item.category || 'Movimiento')}</strong>
+        <strong>${clean(item.detail || item.name || item.category || 'Movimiento')}</strong>
         <small>${clean(item.date || '')}${item.category ? ` · ${clean(item.category)}` : ''}${item.eventSlot ? ` · ${clean(eventForSlot(item.eventSlot)?.name || slotLabels[item.eventSlot-1] || `Evento ${item.eventSlot}`)}` : ''}</small>
       </div>
       <div class="history-value ${type}">
@@ -245,7 +245,7 @@ function investmentInsights(){
   const invested = totalExpenses();
   const revenue = totalRevenue();
   const available = revenue - invested;
-  const categories = ['Material','Catering','Local','Otros'];
+  const categories = ['Material','Alcohol','Local','Otros'];
   const categoryTotals = categories.map(category => ({category,total:sum(state.expenses.filter(item => item.category === category))}));
   const categoryMax = Math.max(1,...categoryTotals.map(item => item.total));
 
@@ -306,7 +306,7 @@ function inversionView(){
       ${investmentInsights()}
       <section class="list-section compact-top">
         <div class="section-head"><h2>Últimas operaciones</h2>${historyButton('expenses')}</div>
-        <div class="filter-row">${['Todos','Material','Catering','Local','Otros'].map(filter => `<button class="chip ${expenseFilter===filter?'active':''}" data-filter="${filter}">${filter}</button>`).join('')}</div>
+        <div class="filter-row">${['Todos','Material','Alcohol','Local','Otros'].map(filter => `<button class="chip ${expenseFilter===filter?'active':''}" data-filter="${filter}">${filter}</button>`).join('')}</div>
         ${filtered.length ? historyRows(filtered,'expenses') : emptyState('No hay inversiones','Añade una inversión y, si quieres, asígnala a un evento.')}
       </section>
       <div class="motivation blue-motivation"><div class="motivation-icon">${icon('chart',20)}</div><div><strong>Invertir en buenos eventos siempre da sus frutos.</strong><span>Experiencias que conectan, personas que recuerdan.</span></div></div>
@@ -450,6 +450,17 @@ function openSheet(eyebrow,title,html,onSubmit){
   sheetEyebrow.textContent = eyebrow;
   sheetTitle.textContent = title;
   sheetForm.innerHTML = html;
+  const categorySelect = sheetForm.querySelector('#expenseCategory');
+  const otherField = sheetForm.querySelector('#expenseOtherField');
+  const syncOtherField = () => {
+    if(!categorySelect || !otherField) return;
+    const isOther = categorySelect.value === 'Otros';
+    otherField.hidden = !isOther;
+    const input = otherField.querySelector('input[name="detail"]');
+    if(input) input.required = isOther;
+  };
+  categorySelect?.addEventListener('change', syncOtherField);
+  syncOtherField();
   sheetForm.onsubmit = event => { event.preventDefault(); onSubmit(new FormData(sheetForm)); };
   backdrop.hidden = false;
   sheet.hidden = false;
@@ -480,15 +491,16 @@ function openSaving(){
 }
 
 function openExpense(){
-  const options = ['Material','Catering','Local','Otros'].map(item => `<option>${item}</option>`).join('');
+  const options = ['Material','Alcohol','Local','Otros'].map(item => `<option>${item}</option>`).join('');
   const eventOptions = `<option value="0">Sin asignar</option>${slotLabels.map((label,index)=>`<option value="${index+1}">${clean(eventForSlot(index+1)?.name || label)}</option>`).join('')}`;
   openSheet('Inversión','Añadir inversión',`
-      <div class="field"><label>Categoría</label><select name="category">${options}</select></div>
+      <div class="field"><label>Categoría</label><select name="category" id="expenseCategory">${options}</select></div>
+      <div class="field" id="expenseOtherField" hidden><label>¿Qué quieres añadir?</label><input name="detail" id="expenseDetail" type="text" placeholder="Ej. decoración, taxi, seguridad"></div>
       ${field('Cantidad','amount','number','','min="0.01" step="0.01"')}
       ${field('Fecha','date','date',new Date().toISOString().slice(0,10))}
       <div class="field"><label>Evento</label><select name="eventSlot">${eventOptions}</select></div>
       <button class="sheet-submit blue">Guardar inversión</button>`, data => {
-        state.expenses.push({id:crypto.randomUUID?.() || String(Date.now()), category:String(data.get('category')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel()), eventSlot:Number(data.get('eventSlot')) || 0});
+        state.expenses.push({id:crypto.randomUUID?.() || String(Date.now()), category:String(data.get('category')), detail:String(data.get('category')) === 'Otros' ? String(data.get('detail') || '').trim() : '', amount:number(data.get('amount')), date:String(data.get('date') || dateLabel()), eventSlot:Number(data.get('eventSlot')) || 0});
         saveState(); closeSheet(); render(); toast('Inversión añadida');
       });
 }
@@ -553,16 +565,18 @@ function openEditMovement(type,id){
       });
     return;
   }
-  const categories = ['Material','Catering','Local','Otros'].map(value => `<option ${item.category===value?'selected':''}>${value}</option>`).join('');
+  const categories = ['Material','Alcohol','Local','Otros'].map(value => `<option ${item.category===value?'selected':''}>${value}</option>`).join('');
   const maxSlot = Math.max(5,...state.events.map(event => number(event.slot)));
   const eventOptions = `<option value="0" ${!number(item.eventSlot)?'selected':''}>Sin asignar</option>${Array.from({length:maxSlot},(_,index)=>index+1).map(slot => `<option value="${slot}" ${number(item.eventSlot)===slot?'selected':''}>${clean(eventForSlot(slot)?.name || slotLabels[slot-1] || `Evento ${slot}`)}</option>`).join('')}`;
   openSheet('Inversión','Editar inversión',`
-    <div class="field"><label>Categoría</label><select name="category">${categories}</select></div>
+    <div class="field"><label>Categoría</label><select name="category" id="expenseCategory">${categories}</select></div>
+    <div class="field" id="expenseOtherField" ${item.category==='Otros'?'':'hidden'}><label>¿Qué quieres añadir?</label><input name="detail" id="expenseDetail" type="text" value="${clean(item.detail || '')}" placeholder="Ej. decoración, taxi, seguridad"></div>
     ${field('Cantidad','amount','number',item.amount,'min="0.01" step="0.01"')}
     ${field('Fecha','date','date',item.date || new Date().toISOString().slice(0,10))}
     <div class="field"><label>Evento</label><select name="eventSlot">${eventOptions}</select></div>
     <button class="sheet-submit blue">Guardar cambios</button>`, data => {
       item.category = String(data.get('category'));
+      item.detail = item.category === 'Otros' ? String(data.get('detail') || '').trim() : '';
       item.amount = number(data.get('amount'));
       item.date = String(data.get('date') || item.date || dateLabel());
       item.eventSlot = Number(data.get('eventSlot')) || 0;
