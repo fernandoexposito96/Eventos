@@ -60,7 +60,7 @@
       rgba(26,10,45,.34) 58%,
       rgba(23,9,40,.54) 78%,
       rgba(18,7,34,.86) 100%),
-    url('./assets/7C3E0286-F9FE-4219-B4A3-888087510DF9.png')!important;
+    url('./assets/hucha-evento.webp')!important;
   background-repeat:no-repeat,no-repeat!important;
   background-size:cover,cover!important;
   background-position:center center,center center!important;
@@ -98,8 +98,8 @@
   color:#fff!important;
   border-color:rgba(255,255,255,.38)!important;
   background:rgba(20,11,33,.34)!important;
-  backdrop-filter:blur(8px)!important;
-  -webkit-backdrop-filter:blur(8px)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
 }
 .theme-purple .purple-panel .hero-money{
   margin-top:54px!important;
@@ -127,8 +127,8 @@
   background:linear-gradient(155deg,rgba(35,18,56,.74),rgba(24,13,40,.62))!important;
   border:1px solid rgba(162,130,255,.58)!important;
   box-shadow:0 7px 18px rgba(42,26,79,.12),inset 0 1px 0 rgba(255,255,255,.07)!important;
-  backdrop-filter:blur(10px)!important;
-  -webkit-backdrop-filter:blur(10px)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
 }
 .theme-purple .purple-panel .metric strong{color:#fff!important;font-size:13px!important}
 .theme-purple .purple-panel .metric span{color:rgba(255,255,255,.78)!important;font-size:9px!important}
@@ -300,4 +300,16 @@
   .theme-purple .content{padding:42px 18px 30px!important}
   .theme-purple .purple-panel .hero-money{margin-top:46px!important}
   .theme-purple .person-contribution-icon{flex-basis:38px!important}
+}
+
+
+/* Rendimiento móvil consolidado — sin capa CSS adicional */
+@media (max-width:600px), (pointer:coarse){
+  .settings-button,.tabs,.hero-panel,.metric,.history-row,.empty-state,.summary-card,.profit-pill,.access-card{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .savings-insight:after{display:none!important;animation:none!important}
+  .chart-line,.chart-dot,.investment-line,.investment-dot{animation:none!important}
+  .chart-line,.investment-line{stroke-dashoffset:0!important}
 }
