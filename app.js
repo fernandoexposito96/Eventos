@@ -81,7 +81,7 @@ function header(){
         <button class="settings-button" id="settingsBtn" aria-label="Ajustes">${icon('gear',19)}</button>
       </div>
       <nav class="tabs" aria-label="Secciones">
-        <button class="tab ${active==='hucha'?'active purple':''}" data-tab="hucha"><span>${icon('piggy',18)}</span>Ucha</button>
+        <button class="tab ${active==='hucha'?'active purple':''}" data-tab="hucha"><span>${icon('piggy',18)}</span>Hucha</button>
         <button class="tab ${active==='inversion'?'active blue':''}" data-tab="inversion"><span>${icon('chart',18)}</span>Inversión</button>
         <button class="tab ${active==='beneficios'?'active green':''}" data-tab="beneficios"><span>${icon('trend',18)}</span>Beneficios</button>
       </nav>
@@ -90,7 +90,7 @@ function header(){
 
 function bottomNav(){
   return `<nav class="bottom-nav" aria-label="Navegación inferior">
-    <button class="nav-btn ${active==='hucha'?'active purple':''}" data-tab="hucha"><span class="nav-symbol">${icon('piggy',21)}</span>Ucha</button>
+    <button class="nav-btn ${active==='hucha'?'active purple':''}" data-tab="hucha"><span class="nav-symbol">${icon('piggy',21)}</span>Hucha</button>
     <button class="nav-btn ${active==='inversion'?'active blue':''}" data-tab="inversion"><span class="nav-symbol">${icon('chart',21)}</span>Inversión</button>
     <button class="nav-btn ${active==='beneficios'?'active green':''}" data-tab="beneficios"><span class="nav-symbol">${icon('trend',21)}</span>Beneficios</button>
   </nav>`;
@@ -131,7 +131,7 @@ function huchaView(){
       <section class="hero-panel purple-panel">
         <div class="feature-head">
           <div class="feature-icon purple-icon">${icon('piggy',27)}</div>
-          <div class="feature-copy"><span class="eyebrow-card">Objetivo de la Ucha</span><p>Juntos hacemos posibles grandes eventos</p></div>
+          <div class="feature-copy"><span class="eyebrow-card">Objetivo de la Hucha</span><p>Juntos hacemos posibles grandes eventos</p></div>
           <button class="mini-button" data-action="edit-goal">Editar</button>
         </div>
         <div class="hero-money">${euro(goal)}</div>
@@ -259,19 +259,21 @@ function beneficiosView(){
             <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Beneficio del evento</span></div>
             <div class="metric"><strong class="${moneyClass(total)}">${euro(total)}</strong><span>Beneficio total</span></div>
           </div>
+          <div class="event-actions">
+            <button class="secondary-button green" data-action="edit-event">${event ? 'Editar evento' : 'Añadir evento'}</button>
+            <button class="primary-button green" data-action="add-event">${icon('plus',20)}${event ? 'Actualizar ingresos' : 'Registrar evento'}</button>
+          </div>
         </div>
-        <button class="primary-button green" data-action="add-event">${icon('plus',20)}${event ? 'Editar evento' : 'Añadir evento'}</button>
       </section>
-      <section class="stats-strip">
-        <div><span class="stat-icon">${icon('calendar',18)}</span><strong>${count}</strong><small>Eventos</small></div>
-        <div><span class="stat-icon">${icon('coins',18)}</span><strong>${euro(totalRevenue())}</strong><small>Ingreso total</small></div>
-        <div><span class="stat-icon">${icon('trend',18)}</span><strong class="${moneyClass(avg)}">${euro(avg)}</strong><small>Beneficio medio</small></div>
-      </section>
-      <section class="list-section">
+      <section class="list-section compact-top">
         <div class="section-head"><h2>Últimos eventos</h2>${clearButton('events','green')}</div>
         ${eventList()}
       </section>
-      <div class="motivation green-motivation"><div class="motivation-icon">${icon('trend',20)}</div><div><strong>Grandes eventos, mejores recuerdos.</strong><span>El esfuerzo de hoy se vive mañana.</span></div></div>
+      <section class="summary-section">
+        <div class="summary-card"><span>Beneficio total</span><strong class="${moneyClass(total)}">${euro(total)}</strong></div>
+        <div class="summary-card"><span>Media por evento</span><strong class="${moneyClass(avg)}">${euro(avg)}</strong></div>
+      </section>
+      <div class="motivation green-motivation"><div class="motivation-icon">${icon('trend',20)}</div><div><strong>Lo importante no es solo ganar, sino crear algo que la gente recuerde.</strong><span>Cada evento es una nueva oportunidad para crecer.</span></div></div>
     </main>
     ${bottomNav()}
   </section>`;
@@ -279,125 +281,119 @@ function beneficiosView(){
 
 function render(){
   app.innerHTML = active === 'hucha' ? huchaView() : active === 'inversion' ? inversionView() : beneficiosView();
-  bindUI();
-}
-
-function bindUI(){
-  document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => {
-    active = button.dataset.tab;
-    render();
-  }));
-  document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
-    expenseFilter = button.dataset.filter;
-    render();
-  }));
-  document.querySelectorAll('[data-event-slot]').forEach(button => button.addEventListener('click', () => {
-    selectedEventSlot = Number(button.dataset.eventSlot);
-    render();
-  }));
-  document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => openForm(button.dataset.action)));
-  document.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click', () => clearList(button.dataset.clear)));
+  app.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => { active = button.dataset.tab; render(); }));
+  app.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => openAction(button.dataset.action)));
+  app.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { expenseFilter = button.dataset.filter; render(); }));
+  app.querySelectorAll('[data-event-slot]').forEach(button => button.addEventListener('click', () => { selectedEventSlot = Number(button.dataset.eventSlot); render(); }));
   document.getElementById('settingsBtn')?.addEventListener('click', openSettings);
-}
-
-function openSheet(title,eyebrow,html,onSubmit){
-  sheetTitle.textContent = title;
-  sheetEyebrow.textContent = eyebrow;
-  sheetForm.innerHTML = html;
-  sheet.hidden = false;
-  backdrop.hidden = false;
-  requestAnimationFrame(() => sheetForm.querySelector('input,select')?.focus());
-  sheetForm.onsubmit = event => {
-    event.preventDefault();
-    onSubmit(new FormData(sheetForm));
-  };
-}
-
-function closeSheet(){
-  sheet.hidden = true;
-  backdrop.hidden = true;
-  sheetForm.innerHTML = '';
-}
-
-closeSheetButton.addEventListener('click', closeSheet);
-backdrop.addEventListener('click', closeSheet);
-
-function openForm(kind){
-  if(kind === 'edit-goal'){
-    openSettings();
-    return;
-  }
-  if(kind === 'add-saving'){
-    openSheet('Añadir dinero','Ucha',`
-      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando">Fernando</option><option value="Jose">Jose</option></select></div>
-      <div class="field"><label>Importe (€)</label><input name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
-      <button class="sheet-submit purple-submit">Guardar aportación</button>`, fd => {
-        state.savings.push({name:fd.get('name'),amount:number(fd.get('amount')),date:dateLabel()});
-        saveState(); closeSheet(); render(); toast('Aportación añadida');
-      });
-  } else if(kind === 'add-expense'){
-    openSheet('Añadir inversión','Inversión',`
-      <div class="field"><label>Concepto</label><input name="name" maxlength="50" placeholder="Ej. Catering" required></div>
-      <div class="field"><label>Categoría</label><select name="category"><option>Material</option><option>Catering</option><option>Local</option><option>Otros</option></select></div>
-      <div class="field"><label>Asignar a evento</label><select name="eventSlot"><option value="0">General / sin asignar</option>${slotLabels.map((label,index)=>`<option value="${index+1}">${label}</option>`).join('')}</select></div>
-      <div class="field"><label>Importe (€)</label><input name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required></div>
-      <button class="sheet-submit blue-submit">Guardar inversión</button>`, fd => {
-        state.expenses.push({name:fd.get('name'),category:fd.get('category'),eventSlot:number(fd.get('eventSlot')),amount:number(fd.get('amount')),date:dateLabel()});
-        saveState(); closeSheet(); render(); toast('Inversión añadida');
-      });
-  } else if(kind === 'add-event'){
-    const current = eventForSlot(selectedEventSlot);
-    openSheet(current ? 'Editar evento' : 'Añadir evento','Beneficios',`
-      <div class="field"><label>Posición</label><select name="slot">${slotLabels.map((label,index)=>`<option value="${index+1}" ${selectedEventSlot===index+1?'selected':''}>${label}</option>`).join('')}</select></div>
-      <div class="field"><label>Nombre del evento</label><input name="name" maxlength="60" value="${clean(current?.name || slotLabels[selectedEventSlot-1])}" required></div>
-      <div class="field"><label>Ingresos del evento (€)</label><input name="amount" type="number" min="0" step="0.01" inputmode="decimal" value="${number(current?.amount)}" required></div>
-      <p class="helper">El beneficio neto será: ingresos − inversiones asignadas a esta posición.</p>
-      <button class="sheet-submit green-submit">Guardar evento</button>`, fd => {
-        const slot = number(fd.get('slot'));
-        state.events = state.events.filter(item => number(item.slot) !== slot);
-        state.events.push({slot,name:fd.get('name'),amount:number(fd.get('amount')),date:dateLabel()});
-        state.events.sort((a,b)=>number(a.slot)-number(b.slot));
-        selectedEventSlot = slot;
-        saveState(); closeSheet(); render(); toast('Evento guardado');
-      });
-  }
-}
-
-function openSettings(){
-  openSheet('Ajustes','Eventos',`
-    <div class="field"><label>Objetivo de la Ucha (€)</label><input name="goal" type="number" min="1" step="1" value="${state.goal}" required></div>
-    <p class="helper">Los datos se sincronizan en vuestro espacio privado compartido.</p>
-    <button class="sheet-submit">Guardar objetivo</button>
-    <button type="button" class="danger-btn" id="resetAll">Borrar todos los datos</button>`, fd => {
-      state.goal = number(fd.get('goal'));
-      saveState(); closeSheet(); render(); toast('Objetivo actualizado');
-    });
-  document.getElementById('resetAll').addEventListener('click', () => {
-    if(confirm('¿Borrar todo el historial de la aplicación?')){
-      state = { ...defaults, savings: [], expenses: [], events: [] };
-      selectedEventSlot = 1;
-      saveState(); closeSheet(); render(); toast('Datos borrados');
-    }
-  });
+  document.querySelectorAll('[data-clear]').forEach(button => button.addEventListener('click', () => clearList(button.dataset.clear)));
 }
 
 function clearList(key){
-  if(!state[key]?.length){ toast('No hay datos que borrar'); return; }
-  const label = key === 'events' ? 'eventos' : key === 'expenses' ? 'inversiones' : 'aportaciones';
-  if(confirm(`¿Vaciar ${label}?`)){
-    state[key] = [];
-    saveState();
-    render();
-    toast('Historial vaciado');
-  }
+  const labels = { savings:'aportaciones', expenses:'inversiones', events:'eventos' };
+  if(!confirm(`¿Vaciar ${labels[key] || 'historial'}?`)) return;
+  if(key === 'events') state.events = [];
+  else state[key] = [];
+  saveState();
+  render();
+  toast('Historial actualizado');
+}
+
+function openAction(action){
+  if(action === 'edit-goal') return openGoal();
+  if(action === 'add-saving') return openSaving();
+  if(action === 'add-expense') return openExpense();
+  if(action === 'add-event' || action === 'edit-event') return openEvent();
+}
+
+function field(label,name,type='text',value='',extra=''){
+  return `<div class="field"><label>${label}</label><input name="${name}" type="${type}" value="${clean(value)}" ${extra} required></div>`;
+}
+
+function openSheet(eyebrow,title,html,onSubmit){
+  sheetEyebrow.textContent = eyebrow;
+  sheetTitle.textContent = title;
+  sheetForm.innerHTML = html;
+  sheetForm.onsubmit = event => { event.preventDefault(); onSubmit(new FormData(sheetForm)); };
+  backdrop.hidden = false;
+  sheet.hidden = false;
+  requestAnimationFrame(() => { backdrop.classList.add('show'); sheet.classList.add('show'); });
+}
+
+function closeSheet(){
+  backdrop.classList.remove('show'); sheet.classList.remove('show');
+  setTimeout(() => { backdrop.hidden = true; sheet.hidden = true; sheetForm.innerHTML = ''; }, 180);
+}
+
+function openGoal(){
+  openSheet('Hucha','Editar objetivo',`${field('Objetivo de ahorro','goal','number',state.goal,'min="1" step="1"')}<button class="sheet-submit purple">Guardar objetivo</button>`, data => {
+    state.goal = number(data.get('goal')) || state.goal;
+    saveState(); closeSheet(); render(); toast('Objetivo actualizado');
+  });
+}
+
+function openSaving(){
+  openSheet('Hucha','Añadir dinero',`
+      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando">Fernando</option><option value="Jose">Jose</option></select></div>
+      ${field('Cantidad','amount','number','','min="0.01" step="0.01"')}
+      ${field('Fecha','date','date',new Date().toISOString().slice(0,10))}
+      <button class="sheet-submit purple">Añadir aportación</button>`, data => {
+        state.savings.push({id:crypto.randomUUID?.() || String(Date.now()), name:String(data.get('name')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel())});
+        saveState(); closeSheet(); render(); toast('Aportación añadida');
+      });
+}
+
+function openExpense(){
+  const options = ['Material','Catering','Local','Otros'].map(item => `<option>${item}</option>`).join('');
+  const eventOptions = `<option value="0">Sin asignar</option>${slotLabels.map((label,index)=>`<option value="${index+1}">${clean(eventForSlot(index+1)?.name || label)}</option>`).join('')}`;
+  openSheet('Inversión','Añadir inversión',`
+      <div class="field"><label>Categoría</label><select name="category">${options}</select></div>
+      ${field('Cantidad','amount','number','','min="0.01" step="0.01"')}
+      ${field('Fecha','date','date',new Date().toISOString().slice(0,10))}
+      <div class="field"><label>Evento</label><select name="eventSlot">${eventOptions}</select></div>
+      <button class="sheet-submit blue">Guardar inversión</button>`, data => {
+        state.expenses.push({id:crypto.randomUUID?.() || String(Date.now()), category:String(data.get('category')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel()), eventSlot:Number(data.get('eventSlot')) || 0});
+        saveState(); closeSheet(); render(); toast('Inversión añadida');
+      });
+}
+
+function openEvent(){
+  const current = eventForSlot(selectedEventSlot);
+  openSheet('Beneficios', current ? 'Editar evento' : 'Registrar evento',`
+      ${field('Nombre del evento','name','text',current?.name || '')}
+      ${field('Ingresos','amount','number',current?.amount || '','min="0" step="0.01"')}
+      ${field('Fecha','date','date',current?.date || new Date().toISOString().slice(0,10))}
+      <button class="sheet-submit green">${current ? 'Guardar cambios' : 'Registrar evento'}</button>`, data => {
+        const payload = {id:current?.id || crypto.randomUUID?.() || String(Date.now()), slot:selectedEventSlot, name:String(data.get('name')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel())};
+        const index = state.events.findIndex(item => Number(item.slot) === selectedEventSlot);
+        if(index >= 0) state.events[index] = payload; else state.events.push(payload);
+        saveState(); closeSheet(); render(); toast(current ? 'Evento actualizado' : 'Evento registrado');
+      });
+}
+
+function openSettings(){
+  openSheet('Eventos','Ajustes',`
+    <div class="settings-copy"><strong>Panel privado</strong><p>Gestiona la Hucha, inversiones y beneficios de vuestros eventos desde un único lugar.</p></div>
+    <button type="button" class="secondary-button neutral" id="resetApp">Restablecer datos</button>`, () => {});
+  document.getElementById('resetApp')?.addEventListener('click', () => {
+    if(!confirm('¿Restablecer todos los datos?')) return;
+    state = { ...defaults, savings: [], expenses: [], events: [] };
+    saveState(); closeSheet(); render(); toast('Datos restablecidos');
+  });
 }
 
 function toast(message){
-  const element = document.createElement('div');
-  element.className = 'toast';
-  element.textContent = message;
-  document.body.appendChild(element);
-  setTimeout(() => element.remove(), 1800);
+  const node = document.getElementById('toast');
+  if(!node) return;
+  node.textContent = message;
+  node.hidden = false;
+  requestAnimationFrame(() => node.classList.add('show'));
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => { node.classList.remove('show'); setTimeout(() => node.hidden = true, 180); }, 2200);
 }
+
+closeSheetButton?.addEventListener('click', closeSheet);
+backdrop?.addEventListener('click', closeSheet);
+document.addEventListener('keydown', event => { if(event.key === 'Escape' && !sheet.hidden) closeSheet(); });
 
 render();
