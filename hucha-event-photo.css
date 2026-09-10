@@ -1,25 +1,32 @@
 /* Hucha — fondo animado ligero y estable.
-   v6: gráfica ascendente + monedas en movimiento continuo mediante SVG local. */
+   v7: gráfica + monedas, composición más limpia y pantalla compacta. */
+.theme-purple .content{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+}
 .theme-purple .hero-panel.purple-panel{
+  order:1;
   position:relative!important;
   overflow:hidden!important;
   isolation:isolate!important;
   background-color:#21142f!important;
   background-image:
     linear-gradient(180deg,
-      rgba(35,17,54,.82) 0%,
-      rgba(31,16,50,.62) 18%,
-      rgba(25,13,42,.20) 38%,
-      rgba(24,13,40,.08) 52%,
+      rgba(35,17,54,.86) 0%,
+      rgba(31,16,50,.66) 18%,
+      rgba(25,13,42,.26) 38%,
+      rgba(24,13,40,.10) 52%,
       rgba(26,15,43,.18) 66%,
-      rgba(31,18,49,.64) 82%,
-      rgba(24,14,38,.90) 100%),
+      rgba(31,18,49,.60) 82%,
+      rgba(24,14,38,.92) 100%),
     url('./assets/hucha-chart-animated-bg.svg')!important;
   background-repeat:no-repeat,no-repeat!important;
   background-size:cover,cover!important;
   background-position:center center,center center!important;
+  border:1px solid rgba(146,96,255,.52)!important;
+  box-shadow:0 24px 52px rgba(86,39,165,.22),0 0 0 1px rgba(255,255,255,.04) inset!important;
 }
-
 .theme-purple .hero-panel.purple-panel::before,
 .theme-purple .hero-panel.purple-panel::after{
   content:none!important;
@@ -34,45 +41,114 @@
   mask:none!important;
   -webkit-mask:none!important;
 }
-
 .theme-purple .hero-panel.purple-panel > *{
   position:relative!important;
   z-index:1!important;
 }
-
+.theme-purple .purple-panel .feature-head{align-items:center!important}
 .theme-purple .purple-panel .feature-copy .eyebrow-card,
 .theme-purple .purple-panel .feature-copy p,
 .theme-purple .purple-panel .hero-money,
 .theme-purple .purple-panel .goal-line,
-.theme-purple .purple-panel .goal-line strong{
-  color:#fff!important;
-}
+.theme-purple .purple-panel .goal-line strong{color:#fff!important}
 .theme-purple .purple-panel .feature-copy p,
-.theme-purple .purple-panel .goal-line{
-  color:rgba(255,255,255,.86)!important;
-}
+.theme-purple .purple-panel .goal-line{color:rgba(255,255,255,.84)!important}
 .theme-purple .purple-panel .hero-money{
-  text-shadow:0 3px 14px rgba(0,0,0,.62)!important;
+  font-size:36px!important;
+  letter-spacing:-1.4px!important;
+  text-shadow:0 3px 14px rgba(0,0,0,.58)!important;
 }
-.theme-purple .purple-panel .goal-line{
-  text-shadow:0 2px 8px rgba(0,0,0,.50)!important;
-}
+.theme-purple .purple-panel .goal-line{text-shadow:0 2px 8px rgba(0,0,0,.44)!important}
 .theme-purple .purple-panel .mini-button{
   color:#fff!important;
-  border-color:rgba(255,255,255,.42)!important;
+  border-color:rgba(255,255,255,.38)!important;
   background:rgba(20,11,33,.24)!important;
   backdrop-filter:blur(8px)!important;
   -webkit-backdrop-filter:blur(8px)!important;
 }
+.theme-purple .purple-panel .metric-grid.three{gap:8px!important;margin-top:14px!important}
 .theme-purple .purple-panel .metric{
-  background:rgba(30,17,47,.42)!important;
-  border-color:rgba(255,255,255,.23)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.10)!important;
+  background:linear-gradient(155deg,rgba(36,20,57,.62),rgba(24,14,40,.46))!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 18px rgba(0,0,0,.12)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
 }
-.theme-purple .purple-panel .metric strong{color:#fff!important;}
-.theme-purple .purple-panel .metric span{color:rgba(255,255,255,.76)!important;}
+.theme-purple .purple-panel .metric strong{color:#fff!important;font-size:13px!important}
+.theme-purple .purple-panel .metric span{color:rgba(255,255,255,.74)!important}
 .theme-purple .purple-panel .progress-track{
-  background:rgba(26,15,42,.50)!important;
-  border-color:rgba(255,255,255,.32)!important;
+  background:rgba(26,15,42,.48)!important;
+  border-color:rgba(255,255,255,.30)!important;
   box-shadow:inset 0 1px 4px rgba(0,0,0,.42),0 1px 0 rgba(255,255,255,.08)!important;
+}
+.theme-purple .purple-panel .primary-button.purple{
+  margin-top:14px!important;
+  border:1px solid rgba(255,255,255,.15)!important;
+  background:linear-gradient(90deg,#9f4dff 0%,#7452ff 48%,#4d5cff 100%)!important;
+  box-shadow:0 14px 28px rgba(88,58,240,.28),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+
+/* Orden visual aprobado: tarjeta > contribuyentes > últimas aportaciones */
+.theme-purple .person-contribution-section{
+  order:2!important;
+  margin-top:18px!important;
+}
+.theme-purple .list-section{
+  order:3!important;
+  margin-top:18px!important;
+}
+.theme-purple .motivation{
+  order:4!important;
+  margin-top:16px!important;
+}
+
+/* Contribuyentes más compactos y limpios */
+.theme-purple .person-contribution-head{margin-bottom:8px!important}
+.theme-purple .person-contribution-head h2{font-size:16px!important;letter-spacing:-.35px!important}
+.theme-purple .person-contribution-head p{display:none!important}
+.theme-purple .person-contribution-grid{gap:9px!important}
+.theme-purple .person-contribution-card{
+  min-height:82px!important;
+  padding:12px 13px!important;
+  border-radius:18px!important;
+  box-shadow:0 10px 24px rgba(45,68,104,.07)!important;
+}
+.theme-purple .person-contribution-icon{
+  width:46px!important;
+  height:46px!important;
+  border-radius:50%!important;
+  font-size:18px!important;
+}
+.theme-purple .person-contribution-copy strong{font-size:13px!important}
+.theme-purple .person-contribution-copy span{font-size:9.5px!important;margin-top:2px!important}
+.theme-purple .person-contribution-copy b{font-size:15px!important;margin-top:2px!important}
+
+/* Últimas aportaciones más despejada */
+.theme-purple .list-section .section-head{margin-bottom:9px!important}
+.theme-purple .list-section .empty-state{
+  padding:18px 14px!important;
+  min-height:82px!important;
+  border-radius:18px!important;
+}
+.theme-purple .list-section .empty-state:before{width:34px!important;height:34px!important;margin-bottom:7px!important}
+.theme-purple .list-section .empty-state strong{font-size:12px!important}
+.theme-purple .list-section .empty-state p{font-size:9.5px!important}
+
+/* Navegación inferior más compacta y menos intrusiva */
+.theme-purple .bottom-nav{
+  width:min(350px,calc(100% - 42px))!important;
+  height:58px!important;
+  bottom:8px!important;
+  padding:3px 8px!important;
+  border-radius:19px!important;
+}
+.theme-purple .nav-btn{font-size:8.5px!important;gap:2px!important}
+.theme-purple .nav-symbol .svg-icon{width:17px!important;height:17px!important}
+.theme-purple.screen{padding-bottom:72px!important}
+
+@media(max-width:390px){
+  .theme-purple .purple-panel .hero-money{font-size:34px!important}
+  .theme-purple .person-contribution-card{min-height:78px!important;padding:11px!important}
+  .theme-purple .person-contribution-icon{width:43px!important;height:43px!important}
+  .theme-purple .bottom-nav{width:calc(100% - 30px)!important;height:56px!important}
 }
