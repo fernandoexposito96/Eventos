@@ -1,0 +1,23 @@
+name: One-time investment category update
+on:
+  push:
+    paths:
+      - '.github/workflows/update-investment-categories.yml'
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply category update
+        run: python .github/scripts/update-investment-categories.py
+      - name: Validate JavaScript
+        run: node --check app.js
+      - name: Commit changes
+        run: |
+          git config user.name "Eventos Investment Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add app.js
+          git diff --cached --quiet || git commit -m "Replace Catering with Alcohol and add custom Otros detail"
+          git push
