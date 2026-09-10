@@ -29,19 +29,24 @@ jobs:
           node --check app.js
           node --check cloud.js
           node --check access.js
-          node --check delete-single.js
           node --check pwa.js
           node --check sw.js
       - name: Validate final clean build
         run: |
           grep -q "cloud.js" index.html
           grep -q "access.js" index.html
-          grep -q "delete-single.js" index.html
+          grep -q "hucha-final.css" index.html
           grep -q "styles.css" index.html
+          test -f hucha-final.css
+          test -f assets/7C3E0286-F9FE-4219-B4A3-888087510DF9.png
           test -f manifest-v11.json
           test -f apple-touch-icon-v13.png
           test -f icon-192-v13.png
           test -f icon-512-v13.png
+          ! test -e delete-single.js
+          ! test -e ucha-reference-final.css
+          ! test -e hucha-event-photo.css
+          ! test -e hucha-frame-mobile-v1.css
           ! test -e cloud-clean.js
           ! test -e cloud-robust.js
           ! test -e bootstrap.js
