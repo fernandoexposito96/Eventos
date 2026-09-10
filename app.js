@@ -202,8 +202,8 @@ function huchaView(){
         </div>
         <button class="primary-button purple" data-action="add-saving">${icon('plus',20)}Añadir dinero</button>
       </section>
-      ${savingsEvolutionChart()}
       <section class="list-section">
+        ${savingsEvolutionChart()}
         <div class="section-head"><h2>Últimas aportaciones</h2>${historyButton('savings')}</div>
         ${state.savings.length ? historyRows(state.savings,'savings') : emptyState('Todavía no hay aportaciones','Añade la primera cuando quieras.')}
       </section>
