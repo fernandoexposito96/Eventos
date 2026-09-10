@@ -26,7 +26,9 @@ function icon(name, size = 22){
     calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/><path d="M8 14h2M14 14h2M8 17h2M14 17h2"/>',
     coins: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v4c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 10v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4M5 14v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
-    trash: '<path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14M10 11v6M14 11v6"/>'
+    trash: '<path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14M10 11v6M14 11v6"/>',
+    edit: '<path d="M4 20h4l11-11a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>'
   };
   return `<svg class="svg-icon" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${paths[name] || paths.calendar}</svg>`;
 }
@@ -109,19 +111,69 @@ function emptyState(title,subtitle){
   return `<div class="empty-state"><strong>${title}</strong><p>${subtitle}</p></div>`;
 }
 
-function historyRows(list,type){
+function historyRows(list,type,limit=8){
   if(!list.length) return '';
   const sign = type === 'expenses' ? '−' : '+';
-  const visible = [...list].reverse().slice(0,8);
+  const reversed = [...list].reverse();
+  const visible = limit > 0 ? reversed.slice(0,limit) : reversed;
   return `<div class="history-list">${visible.map((item,index) => `
     <article class="history-row ${type}">
       <div class="history-avatar avatar-${index%4}">${initials(item.name || item.category || 'EV')}</div>
       <div class="history-copy">
         <strong>${clean(item.name || item.category || 'Movimiento')}</strong>
-        <small>${clean(item.date || '')}${item.category ? ` · ${clean(item.category)}` : ''}${item.eventSlot ? ` · ${slotLabels[item.eventSlot-1]}` : ''}</small>
+        <small>${clean(item.date || '')}${item.category ? ` · ${clean(item.category)}` : ''}${item.eventSlot ? ` · ${clean(eventForSlot(item.eventSlot)?.name || slotLabels[item.eventSlot-1] || `Evento ${item.eventSlot}`)}` : ''}</small>
       </div>
-      <div class="history-value ${type}"><span>${sign}${euro(item.amount)}</span><button type="button" class="single-delete-btn" data-delete-type="${type}" data-delete-id="${clean(item.id)}" aria-label="Borrar solo este movimiento">${icon('trash',14)}</button></div>
+      <div class="history-value ${type}">
+        <span>${sign}${euro(item.amount)}</span>
+        <span class="history-actions">
+          <button type="button" class="single-edit-btn" data-edit-type="${type}" data-edit-id="${clean(item.id)}" aria-label="Editar movimiento">${icon('edit',14)}</button>
+          <button type="button" class="single-delete-btn" data-delete-type="${type}" data-delete-id="${clean(item.id)}" aria-label="Borrar solo este movimiento">${icon('trash',14)}</button>
+        </span>
+      </div>
     </article>`).join('')}</div>`;
+}
+
+function savingsEvolutionChart(){
+  const items = [...state.savings].sort((a,b) => String(a.date || '').localeCompare(String(b.date || '')));
+  if(!items.length) return `<section class="insight-card savings-insight"><div class="insight-head"><div><span>Evolución</span><h3>Ahorro en el tiempo</h3></div>${icon('trend',19)}</div><div class="chart-empty">La gráfica aparecerá con la primera aportación.</div></section>`;
+  let running = 0;
+  const values = [0,...items.map(item => (running += number(item.amount)))];
+  const max = Math.max(1,...values);
+  const last = values.length - 1;
+  const coords = values.map((value,index) => {
+    const x = last ? 8 + (index / last) * 284 : 150;
+    const y = 82 - (value / max) * 62;
+    return [x.toFixed(1),y.toFixed(1)];
+  });
+  const points = coords.map(point => point.join(',')).join(' ');
+  const finalPoint = coords[coords.length-1];
+  return `<section class="insight-card savings-insight">
+    <div class="insight-head"><div><span>Evolución</span><h3>Ahorro en el tiempo</h3></div><strong>${euro(values[values.length-1])}</strong></div>
+    <svg class="savings-chart" viewBox="0 0 300 92" role="img" aria-label="Evolución del ahorro">
+      <line x1="8" y1="82" x2="292" y2="82" class="chart-axis"></line>
+      <polyline points="${points}" class="chart-line"></polyline>
+      <circle cx="${finalPoint[0]}" cy="${finalPoint[1]}" r="4" class="chart-dot"></circle>
+    </svg>
+    <div class="chart-foot"><span>${items.length} ${items.length===1?'aportación':'aportaciones'}</span><span>Meta ${euro(state.goal)}</span></div>
+  </section>`;
+}
+
+function profitComparisonChart(){
+  const items = [...state.events].sort((a,b) => number(a.slot)-number(b.slot));
+  if(!items.length) return `<section class="insight-card profit-insight"><div class="insight-head"><div><span>Comparativa</span><h3>Beneficio por evento</h3></div>${icon('chart',19)}</div><div class="chart-empty">Registra un evento para ver la comparativa.</div></section>`;
+  const rows = items.map(item => ({...item,profit:eventProfit(item.slot)}));
+  const max = Math.max(1,...rows.map(item => Math.abs(item.profit)));
+  return `<section class="insight-card profit-insight">
+    <div class="insight-head"><div><span>Comparativa</span><h3>Beneficio por evento</h3></div><strong class="${moneyClass(totalProfit())}">${euro(totalProfit())}</strong></div>
+    <div class="profit-bars">${rows.map(item => {
+      const width = Math.max(4,Math.round(Math.abs(item.profit)/max*100));
+      return `<div class="profit-bar-row"><div class="profit-bar-copy"><span>${clean(item.name || `Evento ${item.slot}`)}</span><b class="${moneyClass(item.profit)}">${euro(item.profit)}</b></div><div class="profit-track"><span class="${moneyClass(item.profit)}" style="width:${width}%"></span></div></div>`;
+    }).join('')}</div>
+  </section>`;
+}
+
+function historyButton(type){
+  return `<button type="button" class="section-link" data-open-history="${type}">Ver todo</button>`;
 }
 
 function huchaView(){
@@ -150,8 +202,9 @@ function huchaView(){
         </div>
         <button class="primary-button purple" data-action="add-saving">${icon('plus',20)}Añadir dinero</button>
       </section>
+      ${savingsEvolutionChart()}
       <section class="list-section">
-        <div class="section-head"><h2>Últimas aportaciones</h2></div>
+        <div class="section-head"><h2>Últimas aportaciones</h2>${historyButton('savings')}</div>
         ${state.savings.length ? historyRows(state.savings,'savings') : emptyState('Todavía no hay aportaciones','Añade la primera cuando quieras.')}
       </section>
       <section class="person-contribution-section" aria-label="Contribuyentes">
@@ -212,7 +265,7 @@ function inversionView(){
         <button class="primary-button blue" data-action="add-expense">${icon('plus',20)}Añadir inversión</button>
       </section>
       <section class="list-section compact-top">
-        <div class="section-head"><h2>Últimas operaciones</h2></div>
+        <div class="section-head"><h2>Últimas operaciones</h2>${historyButton('expenses')}</div>
         <div class="filter-row">${['Todos','Material','Catering','Local','Otros'].map(filter => `<button class="chip ${expenseFilter===filter?'active':''}" data-filter="${filter}">${filter}</button>`).join('')}</div>
         ${filtered.length ? historyRows(filtered,'expenses') : emptyState('No hay inversiones','Añade una inversión y, si quieres, asígnala a un evento.')}
       </section>
@@ -277,6 +330,7 @@ function beneficiosView(){
         <div class="section-head"><h2>Últimos eventos</h2></div>
         ${eventList()}
       </section>
+      ${profitComparisonChart()}
       <section class="summary-section">
         <div class="summary-card"><span>Beneficio total</span><strong class="${moneyClass(total)}">${euro(total)}</strong></div>
         <div class="summary-card"><span>Media por evento</span><strong class="${moneyClass(avg)}">${euro(avg)}</strong></div>
@@ -315,6 +369,12 @@ function render(){
   app.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => openAction(button.dataset.action)));
   app.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { expenseFilter = button.dataset.filter; render(); }));
   app.querySelectorAll('[data-event-slot]').forEach(button => button.addEventListener('click', () => { selectedEventSlot = Number(button.dataset.eventSlot); render(); }));
+  app.querySelectorAll('[data-edit-id]').forEach(button => button.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    openEditMovement(button.dataset.editType,button.dataset.editId);
+  }));
+  app.querySelectorAll('[data-open-history]').forEach(button => button.addEventListener('click', () => openHistory(button.dataset.openHistory)));
   app.querySelectorAll('[data-delete-id]').forEach(button => button.addEventListener('click', event => {
     event.preventDefault();
     event.stopPropagation();
@@ -405,6 +465,69 @@ function openEvent(){
         if(index >= 0) state.events[index] = payload; else state.events.push(payload);
         saveState(); closeSheet(); render(); toast(current ? 'Evento actualizado' : 'Evento registrado');
       });
+}
+
+function openHistory(type){
+  if(!['savings','expenses'].includes(type)) return;
+  const title = type === 'savings' ? 'Historial de aportaciones' : 'Historial de inversiones';
+  const list = state[type] || [];
+  openSheet('Historial',title,`
+    <div class="history-search-wrap">${icon('search',17)}<input id="historySearch" type="search" placeholder="Buscar por nombre, fecha o categoría" aria-label="Buscar movimientos"></div>
+    <div class="history-sheet-meta"><span>${list.length} ${list.length===1?'movimiento':'movimientos'}</span><strong>${euro(sum(list))}</strong></div>
+    <div id="historySheetList">${list.length ? historyRows(list,type,0) : emptyState('Sin movimientos','Aquí aparecerá todo el histórico.')}</div>`, () => {});
+  const search = document.getElementById('historySearch');
+  search?.addEventListener('input', () => {
+    const q = search.value.trim().toLocaleLowerCase('es');
+    document.querySelectorAll('#historySheetList .history-row').forEach(row => {
+      row.hidden = Boolean(q) && !row.textContent.toLocaleLowerCase('es').includes(q);
+    });
+  });
+  sheetForm.querySelectorAll('[data-edit-id]').forEach(button => button.addEventListener('click', () => openEditMovement(button.dataset.editType,button.dataset.editId)));
+  sheetForm.querySelectorAll('[data-delete-id]').forEach(button => button.addEventListener('click', () => {
+    const id = button.dataset.deleteId;
+    const rowIndex = state[type].findIndex(item => String(item.id) === String(id));
+    if(rowIndex < 0) return;
+    if(!confirm('¿Borrar solo este movimiento?')) return;
+    state[type].splice(rowIndex,1);
+    saveState();
+    render();
+    openHistory(type);
+    toast('Movimiento eliminado');
+  }));
+}
+
+function openEditMovement(type,id){
+  if(!['savings','expenses'].includes(type)) return;
+  const item = state[type].find(row => String(row.id) === String(id));
+  if(!item){ toast('No se encontró ese movimiento'); return; }
+  if(type === 'savings'){
+    openSheet('Hucha','Editar aportación',`
+      <div class="field"><label>Persona</label><select name="name" required><option value="Fernando" ${canonicalPerson(item.name)==='Fernando'?'selected':''}>Fernando</option><option value="José" ${canonicalPerson(item.name)==='José'?'selected':''}>José</option></select></div>
+      ${field('Cantidad','amount','number',item.amount,'min="0.01" step="0.01"')}
+      ${field('Fecha','date','date',item.date || new Date().toISOString().slice(0,10))}
+      <button class="sheet-submit purple">Guardar cambios</button>`, data => {
+        item.name = canonicalPerson(data.get('name'));
+        item.amount = number(data.get('amount'));
+        item.date = String(data.get('date') || item.date || dateLabel());
+        saveState(); closeSheet(); render(); toast('Aportación actualizada');
+      });
+    return;
+  }
+  const categories = ['Material','Catering','Local','Otros'].map(value => `<option ${item.category===value?'selected':''}>${value}</option>`).join('');
+  const maxSlot = Math.max(5,...state.events.map(event => number(event.slot)));
+  const eventOptions = `<option value="0" ${!number(item.eventSlot)?'selected':''}>Sin asignar</option>${Array.from({length:maxSlot},(_,index)=>index+1).map(slot => `<option value="${slot}" ${number(item.eventSlot)===slot?'selected':''}>${clean(eventForSlot(slot)?.name || slotLabels[slot-1] || `Evento ${slot}`)}</option>`).join('')}`;
+  openSheet('Inversión','Editar inversión',`
+    <div class="field"><label>Categoría</label><select name="category">${categories}</select></div>
+    ${field('Cantidad','amount','number',item.amount,'min="0.01" step="0.01"')}
+    ${field('Fecha','date','date',item.date || new Date().toISOString().slice(0,10))}
+    <div class="field"><label>Evento</label><select name="eventSlot">${eventOptions}</select></div>
+    <button class="sheet-submit blue">Guardar cambios</button>`, data => {
+      item.category = String(data.get('category'));
+      item.amount = number(data.get('amount'));
+      item.date = String(data.get('date') || item.date || dateLabel());
+      item.eventSlot = Number(data.get('eventSlot')) || 0;
+      saveState(); closeSheet(); render(); toast('Inversión actualizada');
+    });
 }
 
 function openSettings(){

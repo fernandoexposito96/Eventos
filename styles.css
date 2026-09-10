@@ -540,3 +540,41 @@ body.access-locked .access-gate{display:flex}
 .person-contribution-copy span{margin-top:3px;font-size:10px;color:#85869a}
 .person-contribution-copy b{margin-top:5px;font-size:20px;color:#161526;white-space:nowrap}
 @media(max-width:360px){.person-contribution-card{padding:12px 9px;gap:8px}.person-contribution-icon{width:36px;height:36px;flex-basis:36px;font-size:15px}.person-contribution-copy b{font-size:17px}}
+
+
+/* Eventos insights/history v1 */
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.section-link{border:0;background:transparent;padding:4px 0;font:inherit;font-size:12px;font-weight:800;color:#684cff;cursor:pointer}
+.theme-blue .section-link{color:#356df3}
+.history-value{gap:7px;flex-wrap:nowrap}
+.history-actions{display:inline-flex;align-items:center;gap:3px;margin-left:3px}
+.single-edit-btn,.single-delete-btn{width:29px;height:29px;border:0;border-radius:10px;display:inline-grid;place-items:center;padding:0;cursor:pointer}
+.single-edit-btn{background:#f1f4fb;color:#60708e}
+.single-delete-btn{background:#f5f5f8;color:#e34b58}
+.insight-card{margin-top:18px;padding:15px 16px;border:1px solid #e9edf5;border-radius:20px;background:rgba(255,255,255,.98);box-shadow:0 10px 28px rgba(19,31,54,.07)}
+.insight-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px}
+.insight-head>div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.insight-head span{font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8b95aa}
+.insight-head h3{margin:0;font-size:15px;line-height:1.2;color:#17233a}
+.insight-head>strong{font-size:14px;color:#17233a;white-space:nowrap}
+.savings-chart{display:block;width:100%;height:92px;overflow:visible}
+.chart-axis{stroke:#e9edf6;stroke-width:1}
+.chart-line{fill:none;stroke:#7452ff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.chart-dot{fill:#7452ff;stroke:#fff;stroke-width:3}
+.chart-foot{display:flex;justify-content:space-between;gap:12px;margin-top:2px;color:#8a95aa;font-size:9.5px}
+.chart-empty{padding:17px 4px 8px;color:#8792a8;font-size:11px;text-align:center}
+.profit-bars{display:grid;gap:10px;margin-top:12px}
+.profit-bar-row{display:grid;gap:5px}
+.profit-bar-copy{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10.5px;color:#56627a}
+.profit-bar-copy span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profit-bar-copy b{font-size:10.5px;white-space:nowrap}
+.profit-track{height:7px;border-radius:999px;background:#eef2f6;overflow:hidden}
+.profit-track>span{display:block;height:100%;border-radius:inherit;background:#20b574}
+.profit-track>span.negative{background:#e45a66}
+.history-search-wrap{display:flex;align-items:center;gap:8px;border:1px solid #e3e7ef;background:#f8faff;border-radius:14px;padding:0 11px;margin-bottom:10px;color:#7d899f}
+.history-search-wrap input{width:100%;height:44px;border:0;outline:0;background:transparent;font:inherit;font-size:12px;color:#17233a}
+.history-sheet-meta{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 12px;color:#7b879c;font-size:10px}
+.history-sheet-meta strong{color:#17233a;font-size:12px}
+#historySheetList{max-height:52vh;overflow:auto;padding-right:2px}
+#historySheetList .history-row{margin-bottom:7px}
+@media(max-width:390px){.insight-card{padding:13px 14px;border-radius:18px}.single-edit-btn,.single-delete-btn{width:27px;height:27px}}
