@@ -72,16 +72,14 @@ function eventForSlot(slot){ return state.events.find(item => Number(item.slot) 
 function expensesForSlot(slot){ return state.expenses.filter(item => Number(item.eventSlot) === Number(slot)); }
 function expenseTotalForSlot(slot){ return sum(expensesForSlot(slot)); }
 function eventBenefit(slot){ return number(eventForSlot(slot)?.amount); }
-function eventRevenue(slot){ return eventBenefit(slot) + expenseTotalForSlot(slot); }
 function eventProfit(slot){ return eventForSlot(slot) ? eventBenefit(slot) : 0; }
 function totalBenefits(){ return sum(state.events); }
-function totalRevenue(){ return totalBenefits() + registeredExpenseTotal(); }
 function totalExpenses(){ return sum(state.expenses); }
 function registeredEventExpenses(){ return state.expenses.filter(item => Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot))); }
 function pendingExpenses(){ return state.expenses.filter(item => !(Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot)))); }
 function registeredExpenseTotal(){ return sum(registeredEventExpenses()); }
 function pendingExpenseTotal(){ return sum(pendingExpenses()); }
-function totalProfit(){ return totalRevenue() - registeredExpenseTotal(); }
+function totalProfit(){ return totalBenefits(); }
 function savingsTotalForPerson(name){
   const wanted = String(name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   return sum(state.savings.filter(item => String(item.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase() === wanted));
@@ -249,8 +247,9 @@ function huchaView(){
 function investmentInsights(){
   const items = [...state.expenses].sort((a,b) => String(a.date || '').localeCompare(String(b.date || '')));
   const invested = totalExpenses();
-  const revenue = totalRevenue();
-  const available = revenue - invested;
+  const benefits = totalBenefits();
+  const available = benefits;
+  const managedTotal = benefits + invested;
   const categories = ['Material','Alcohol','Local','Otros'];
   const categoryTotals = categories.map(category => ({category,total:sum(state.expenses.filter(item => item.category === category))}));
   const categoryMax = Math.max(1,...categoryTotals.map(item => item.total));
@@ -274,8 +273,8 @@ function investmentInsights(){
     </section>
 
     <section class="investment-budget-card">
-      <div><span class="investment-kicker">Presupuesto disponible</span><strong class="${moneyClass(available)}">${euro(available)}</strong><small>Beneficios ${euro(totalBenefits())} · Invertido ${euro(invested)}</small></div>
-      <div class="investment-budget-ring" style="--budget-progress:${Math.min(100, revenue>0 ? invested/revenue*100 : 0).toFixed(1)}%"><span>${revenue>0 ? Math.round(invested/revenue*100) : 0}%</span></div>
+      <div><span class="investment-kicker">Beneficio acumulado</span><strong class="${moneyClass(available)}">${euro(available)}</strong><small>Beneficios ${euro(totalBenefits())} · Invertido ${euro(invested)}</small></div>
+      <div class="investment-budget-ring" style="--budget-progress:${Math.min(100, managedTotal>0 ? invested/managedTotal*100 : 0).toFixed(1)}%"><span>${managedTotal>0 ? Math.round(invested/managedTotal*100) : 0}%</span></div>
     </section>
 
     <section class="insight-card investment-category-card">
@@ -303,7 +302,7 @@ function inversionView(){
         <div class="hero-money">${euro(invested)}</div>
         <div class="metric-grid four">
           <div class="metric"><strong>${euro(invested)}</strong><span>Invertido</span></div>
-          <div class="metric"><strong>${euro(totalRevenue())}</strong><span>Beneficios</span></div>
+          <div class="metric"><strong>${euro(totalBenefits())}</strong><span>Beneficios</span></div>
           <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Resultado</span></div>
           <div class="metric"><strong>${state.events.length}</strong><span>Eventos</span></div>
         </div>
@@ -343,7 +342,7 @@ function eventList(){
 
 function beneficiosView(){
   const event = eventForSlot(selectedEventSlot);
-  const revenue = event ? eventRevenue(selectedEventSlot) : 0;
+  const declaredBenefit = event ? eventBenefit(selectedEventSlot) : 0;
   const invested = event ? expenseTotalForSlot(selectedEventSlot) : 0;
   const profit = event ? eventProfit(selectedEventSlot) : 0;
   const total = totalProfit();
@@ -369,9 +368,9 @@ function beneficiosView(){
         <div class="event-detail-card">
           <div class="event-detail-head"><span class="detail-icon">${icon('calendar',18)}</span><div><strong>${clean(event?.name || `Evento ${selectedEventSlot}`)}</strong><small>${clean(event?.date || 'Sin registrar')}</small></div></div>
           <div class="metric-grid two event-metrics">
-            <div class="metric"><strong>${euro(revenue)}</strong><span>Beneficio declarado</span></div>
+            <div class="metric"><strong class="${moneyClass(declaredBenefit)}">${euro(declaredBenefit)}</strong><span>Beneficio neto</span></div>
             <div class="metric"><strong class="${event && invested>0?'negative':''}">${euro(invested)}</strong><span>Inversión del evento</span></div>
-            <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Beneficio del evento</span></div>
+            <div class="metric"><strong>${euro(declaredBenefit + invested)}</strong><span>Total gestionado</span></div>
             <div class="metric"><strong class="${moneyClass(total)}">${euro(total)}</strong><span>Beneficio total</span></div>
           </div>
           <div class="benefits-roi-row">
@@ -380,7 +379,7 @@ function beneficiosView(){
           </div>
           <div class="event-actions">
             <button class="secondary-button green" data-action="edit-event">${event ? 'Editar evento' : 'Añadir evento'}</button>
-            <button class="primary-button green" data-action="add-event">${icon('plus',20)}${event ? 'Actualizar ingresos' : 'Registrar evento'}</button>
+            <button class="primary-button green" data-action="add-event">${icon('plus',20)}${event ? 'Actualizar beneficio' : 'Registrar evento'}</button>
           </div>
         </div>
       </section>
