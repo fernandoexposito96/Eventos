@@ -71,9 +71,11 @@ const initials = text => String(text || 'EV').split(/\s+/).filter(Boolean).slice
 function eventForSlot(slot){ return state.events.find(item => Number(item.slot) === Number(slot)); }
 function expensesForSlot(slot){ return state.expenses.filter(item => Number(item.eventSlot) === Number(slot)); }
 function expenseTotalForSlot(slot){ return sum(expensesForSlot(slot)); }
-function eventRevenue(slot){ return number(eventForSlot(slot)?.amount); }
-function eventProfit(slot){ return eventForSlot(slot) ? eventRevenue(slot) - expenseTotalForSlot(slot) : 0; }
-function totalRevenue(){ return sum(state.events); }
+function eventBenefit(slot){ return number(eventForSlot(slot)?.amount); }
+function eventRevenue(slot){ return eventBenefit(slot) + expenseTotalForSlot(slot); }
+function eventProfit(slot){ return eventForSlot(slot) ? eventBenefit(slot) : 0; }
+function totalBenefits(){ return sum(state.events); }
+function totalRevenue(){ return totalBenefits() + registeredExpenseTotal(); }
 function totalExpenses(){ return sum(state.expenses); }
 function registeredEventExpenses(){ return state.expenses.filter(item => Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot))); }
 function pendingExpenses(){ return state.expenses.filter(item => !(Number(item.eventSlot) > 0 && Boolean(eventForSlot(item.eventSlot)))); }
@@ -272,7 +274,7 @@ function investmentInsights(){
     </section>
 
     <section class="investment-budget-card">
-      <div><span class="investment-kicker">Presupuesto disponible</span><strong class="${moneyClass(available)}">${euro(available)}</strong><small>Ingresos ${euro(revenue)} · Invertido ${euro(invested)}</small></div>
+      <div><span class="investment-kicker">Presupuesto disponible</span><strong class="${moneyClass(available)}">${euro(available)}</strong><small>Beneficios ${euro(totalBenefits())} · Invertido ${euro(invested)}</small></div>
       <div class="investment-budget-ring" style="--budget-progress:${Math.min(100, revenue>0 ? invested/revenue*100 : 0).toFixed(1)}%"><span>${revenue>0 ? Math.round(invested/revenue*100) : 0}%</span></div>
     </section>
 
@@ -301,7 +303,7 @@ function inversionView(){
         <div class="hero-money">${euro(invested)}</div>
         <div class="metric-grid four">
           <div class="metric"><strong>${euro(invested)}</strong><span>Invertido</span></div>
-          <div class="metric"><strong>${euro(totalRevenue())}</strong><span>Ingresos</span></div>
+          <div class="metric"><strong>${euro(totalRevenue())}</strong><span>Beneficios</span></div>
           <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Resultado</span></div>
           <div class="metric"><strong>${state.events.length}</strong><span>Eventos</span></div>
         </div>
@@ -367,7 +369,7 @@ function beneficiosView(){
         <div class="event-detail-card">
           <div class="event-detail-head"><span class="detail-icon">${icon('calendar',18)}</span><div><strong>${clean(event?.name || `Evento ${selectedEventSlot}`)}</strong><small>${clean(event?.date || 'Sin registrar')}</small></div></div>
           <div class="metric-grid two event-metrics">
-            <div class="metric"><strong>${euro(revenue)}</strong><span>Ingresos del evento</span></div>
+            <div class="metric"><strong>${euro(revenue)}</strong><span>Beneficio declarado</span></div>
             <div class="metric"><strong class="${event && invested>0?'negative':''}">${euro(invested)}</strong><span>Inversión del evento</span></div>
             <div class="metric"><strong class="${moneyClass(profit)}">${euro(profit)}</strong><span>Beneficio del evento</span></div>
             <div class="metric"><strong class="${moneyClass(total)}">${euro(total)}</strong><span>Beneficio total</span></div>
@@ -534,15 +536,30 @@ function openExpense(){
 
 function openEvent(){
   const current = eventForSlot(selectedEventSlot);
+  const pending = state.expenses.filter(item => {
+    const assigned = Number(item.eventSlot) || 0;
+    return assigned === 0 || assigned === selectedEventSlot;
+  });
+  const pendingHtml = pending.length ? `<div class="field pending-select-field"><label>Inversiones pendientes</label><div class="pending-expense-options">${pending.map(item => {
+    const checked = Number(item.eventSlot) === selectedEventSlot ? 'checked' : '';
+    const title = clean(item.detail || item.category || 'Inversión');
+    return `<label class="pending-expense-option"><input type="checkbox" name="expenseIds" value="${clean(item.id)}" ${checked}><span><strong>${title}</strong><small>${clean(item.category || '')} · ${euro(item.amount)}</small></span></label>`;
+  }).join('')}</div><small class="field-help">Marca las inversiones que pertenecen a este evento. Se usarán para el ROI y el desglose.</small></div>` : `<div class="field pending-select-field"><label>Inversiones pendientes</label><div class="pending-expense-empty">No hay inversiones pendientes para asignar.</div></div>`;
   openSheet('Beneficios', current ? 'Editar evento' : 'Registrar evento',`
       ${field('Nombre del evento','name','text',current?.name || '')}
-      ${field('Ingresos','amount','number',current?.amount || '','min="0" step="0.01"')}
+      ${field('Beneficio','amount','number',current?.amount || '','min="0" step="0.01"')}
       ${field('Fecha','date','date',current?.date || new Date().toISOString().slice(0,10))}
+      ${pendingHtml}
       <button class="sheet-submit green">${current ? 'Guardar cambios' : 'Registrar evento'}</button>`, data => {
+        const selectedIds = new Set(data.getAll('expenseIds').map(String));
+        state.expenses.forEach(item => {
+          if(Number(item.eventSlot) === selectedEventSlot && !selectedIds.has(String(item.id))) item.eventSlot = 0;
+          if(selectedIds.has(String(item.id))) item.eventSlot = selectedEventSlot;
+        });
         const payload = {id:current?.id || crypto.randomUUID?.() || String(Date.now()), slot:selectedEventSlot, name:String(data.get('name')), amount:number(data.get('amount')), date:String(data.get('date') || dateLabel())};
         const index = state.events.findIndex(item => Number(item.slot) === selectedEventSlot);
         if(index >= 0) state.events[index] = payload; else state.events.push(payload);
-        saveState(); closeSheet(); render(); toast(current ? 'Evento actualizado' : 'Evento registrado');
+        saveState(); closeSheet(); render(); toast(current ? 'Evento y asignaciones actualizados' : 'Evento registrado y asignado');
       });
 }
 
