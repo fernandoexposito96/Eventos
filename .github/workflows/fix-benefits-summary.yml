@@ -1,0 +1,74 @@
+name: One-time Beneficios summary layout fix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-benefits-summary.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Fix Beneficios summary cards
+        shell: bash
+        run: |
+          cat >> styles.css <<'CSS'
+
+          /* Beneficios summary layout fix */
+          .summary-section{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:10px;
+            margin-top:16px;
+          }
+          .summary-card{
+            min-width:0;
+            padding:14px 13px;
+            border:1px solid rgba(255,255,255,.9);
+            border-radius:18px;
+            background:rgba(255,255,255,.88);
+            box-shadow:0 10px 24px rgba(35,70,110,.08);
+            backdrop-filter:blur(14px);
+            -webkit-backdrop-filter:blur(14px);
+          }
+          .summary-card span{
+            display:block;
+            font-size:10px;
+            line-height:1.25;
+            color:#7b879b;
+            font-weight:700;
+          }
+          .summary-card strong{
+            display:block;
+            margin-top:6px;
+            font-size:18px;
+            line-height:1.1;
+            font-weight:850;
+            letter-spacing:-.35px;
+            color:#0b1d38;
+            overflow-wrap:anywhere;
+          }
+          .theme-green .summary-card:first-child{
+            border-color:rgba(10,161,113,.14);
+            background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(232,250,243,.9));
+          }
+          .theme-green .summary-card:last-child{
+            border-color:rgba(47,115,224,.12);
+            background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(238,244,255,.9));
+          }
+          @media (max-width:360px){
+            .summary-section{grid-template-columns:1fr;}
+          }
+          CSS
+          node --check app.js
+          git rm .github/workflows/fix-benefits-summary.yml
+          git config user.name "Eventos Layout Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add styles.css
+          git commit -m "Fix Beneficios summary card layout"
+          git push
