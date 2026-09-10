@@ -78,10 +78,9 @@
     sheetForm.appendChild(button);
   }
 
-  if(sheetForm){
-    const observer = new MutationObserver(addLogoutButton);
-    observer.observe(sheetForm,{childList:true,subtree:true});
-  }
+  document.addEventListener('click', event => {
+    if(event.target?.closest?.('#settingsBtn')) requestAnimationFrame(addLogoutButton);
+  });
 
   async function verifyPin(pin){
     const workspace = (()=>{try{return JSON.parse(localStorage.getItem(WORKSPACE_KEY)||'null')}catch{return null}})();
